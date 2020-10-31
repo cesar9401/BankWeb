@@ -19,11 +19,13 @@
                 <div class="row py-4 my-4">
                     <div class="col">
                         <form id="form-load" action="ManagerController" method="post" enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col text-right">
-                                    <input type="file" name="xml" accept=".xml" required>
+                            <div class="row py-2">
+                                <div class="col-12 col-lg-2 offset-lg-5 text-center">
+                                    <input type="file" name="data" accept=".xml" required>
                                 </div>
-                                <div class="col">
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-12 col-lg-2 offset-lg-5 text-center">
                                     <button type="submit" class="btn btn-success" name="action" value="data">Cargar Archivos</button>
                                 </div>
                             </div>

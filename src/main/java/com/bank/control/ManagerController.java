@@ -73,8 +73,10 @@ public class ManagerController extends HttpServlet {
         String action = request.getParameter("action");
         switch (action) {
             case "data":
+                System.out.println(action);
                 Part filePart = request.getPart("data");
                 ReadXml read = new ReadXml(filePart);
+                read.readData();
                 break;
         }
     }

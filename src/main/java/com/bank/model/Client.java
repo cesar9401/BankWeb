@@ -4,6 +4,7 @@ package com.bank.model;
 import com.bank.control.ReadXml;
 import java.io.InputStream;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.Element;
 
@@ -21,6 +22,13 @@ public class Client extends Person {
         super(e);
         this.clientId = Integer.parseInt(e.getChildText("CODIGO"));
         this.birth = ReadXml.getDate(e.getChildText("BIRTH"));
+        
+        Element el = e.getChild("CUENTAS");
+        List<Element> elChild = el.getChildren("CUENTA");
+        accounts = new ArrayList<>();
+        for(Element i : elChild) {
+            accounts.add(new Account(i, this.clientId));
+        }
     }
 
     public int getClientId() {
@@ -45,6 +53,14 @@ public class Client extends Person {
 
     public void setPdfDpi(InputStream pdfDpi) {
         this.pdfDpi = pdfDpi;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     @Override

@@ -1,7 +1,9 @@
 
 package com.bank.model;
 
+import com.bank.control.ReadXml;
 import java.sql.Date;
+import org.jdom2.Element;
 
 /**
  *
@@ -26,6 +28,13 @@ public class Account {
     private int associatedId;
     private String status;
     private int tryNumber;
+
+    Account(Element i, int clientId) {
+        this.accountId = Integer.parseInt(i.getChildText("CODIGO"));
+        this.createdOn = ReadXml.getDate(i.getChildText("CREADA"));
+        this.credit = Double.parseDouble(i.getChildText("CREDITO"));
+        this.clientId = clientId;
+    }
 
     public int getAccountId() {
         return accountId;

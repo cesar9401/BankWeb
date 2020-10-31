@@ -27,6 +27,16 @@ public class ReadXml {
         this.filePart = filePart;
     }
 
+    public void readData() {
+        getManagers();
+        getCashiers();
+        getClients();
+        getTransactions();
+    }
+    
+    /**
+     * Metodo para leer gerentes
+     */
     private void getManagers() {
         List<Manager> managers = new ArrayList<>();
         List<Element> listM = getData("GERENTE");
@@ -39,6 +49,9 @@ public class ReadXml {
         }
     }
     
+    /**
+     * Metodo para leer gerentes
+     */
     private void getCashiers() {
         List<Cashier> cashiers = new ArrayList<>();
         List<Element> listC = getData("CAJERO");
@@ -51,6 +64,9 @@ public class ReadXml {
         }
     }
     
+    /**
+     * Metodo para leer clientes
+     */
     private void getClients() {
         List<Client> clients = new ArrayList<>();
         List<Element> listC = getData("CLIENTE");
@@ -60,9 +76,15 @@ public class ReadXml {
         
         for(Client c : clients) {
             System.out.println(c.toString());
+            for(Account a : c.getAccounts()) {
+                System.out.println(a.toString());
+            }
         }
     }
     
+    /**
+     * Metodo para leer transacciones
+     */
     private void getTransactions() {
         List<Transaction> transactions = new ArrayList<>();
         List<Element> listT = getData("TRANSACCION");
@@ -79,12 +101,12 @@ public class ReadXml {
         List<Element> elements = new ArrayList<>();
         try {
             SAXBuilder builder = new SAXBuilder();
-            InputStream input = this.filePart.getInputStream();
+            InputStream input = filePart.getInputStream();
             Document document = builder.build(input);
             Element root = document.getRootElement();
             elements = root.getChildren(node);
             
-        } catch (IOException | JDOMException ex) {
+        } catch (JDOMException | IOException ex) {
             ex.printStackTrace(System.out);
         }
 
