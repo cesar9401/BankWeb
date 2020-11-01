@@ -8,8 +8,11 @@
         <title>Banco "El Billeton"</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <a id="link" href="ManagerController?action=takeChoice" class="btn btn-success" hidden=""></a>
         
         <%@include file="js.html"%>
+        <script>
+            this.document.getElementById("link").click();
+        </script>
     </body>
 </html>

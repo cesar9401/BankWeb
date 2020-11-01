@@ -4,6 +4,8 @@ package com.bank.model;
 import com.bank.control.ReadXml;
 import java.io.InputStream;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.Element;
@@ -29,6 +31,12 @@ public class Client extends Person {
         for(Element i : elChild) {
             accounts.add(new Account(i, this.clientId));
         }
+    }
+    
+    public Client(ResultSet rs) throws SQLException {
+        super(rs);
+        this.clientId = rs.getInt("client_id");
+        this.birth = rs.getDate("birth");
     }
 
     public int getClientId() {

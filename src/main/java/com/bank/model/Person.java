@@ -1,6 +1,8 @@
 
 package com.bank.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.jdom2.Element;
 
 /**
@@ -22,6 +24,20 @@ public class Person {
         this.password = e.getChildText("PASSWORD");
     }
 
+    public Person(String name, String dpi, String password) {
+        this.name = name;
+        this.dpi = dpi;
+        this.password = password;
+    }
+    
+    public Person(ResultSet rs) throws SQLException {
+        this.name = rs.getString("name");
+        this.dpi = rs.getString("dpi");
+        this.address = rs.getString("address");
+        this.gender = rs.getBoolean("gender");
+        this.password = rs.getString("password");
+    }
+    
     public String getName() {
         return name;
     }
