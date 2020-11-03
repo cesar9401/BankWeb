@@ -27,11 +27,12 @@ public class ManagerDao {
      * @param w
      */
     public void insertWorkday(WorkDay w) {
-        String query = "INSERT INTO WORKDAYS(workday, start_time, end_time) VALUES(?, ?, ?)";
+        String query = "INSERT INTO WORKDAYS(workday_id, workday, start_time, end_time) VALUES(?, ?, ?, ?)";
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
-            ps.setString(1, w.getWorkDay());
-            ps.setTime(2, w.getStartTime());
-            ps.setTime(3, w.getEndTime());
+            ps.setInt(1, w.getWorkDayId());
+            ps.setString(2, w.getWorkDay());
+            ps.setTime(3, w.getStartTime());
+            ps.setTime(4, w.getEndTime());
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -61,7 +62,8 @@ public class ManagerDao {
 
     /**
      * Metodo para obtener listado de gerentes
-     * @return 
+     *
+     * @return
      */
     public List<Manager> getManagers() {
         String query = "SELECT m.*, w.workday, w.start_time, w.end_time FROM MANAGERS m INNER JOIN WORKDAYS w ON m.workday_id = w.workday_id";
@@ -76,21 +78,27 @@ public class ManagerDao {
 
         return managers;
     }
-    
+
     /**
      * Metodo para obtener a un gerente segun su usuario y password
+     *
      * @param user
      * @param password
-     * @return 
+     * @return
      */
     public Manager getManager(int user, String password) {
-        String query = "SELECT m.*, w.workday, w.start_time, w.end_time FROM MANAGERS m INNER JOIN WORKDAYS w ON m.workday_id = w.workday_id WHERE m.manager_id = ? AND m.password = ?";
+        String query = "SELECT m.*, w.workday, w.start_time, w.end_time FROM MANAGERS m INNER JOIN WORKDAYS w ON m.workday_id = w.workday_id WHERE m.manager_id = ?";
+        if (!password.equals("")) {
+            query += " AND m.password = ?";
+        }
         Manager m = null;
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, user);
-            ps.setString(2, password);
+            if (!password.equals("")) {
+                ps.setString(2, password);
+            }
             try (ResultSet rs = ps.executeQuery()) {
-                if(rs.next()) {
+                if (rs.next()) {
                     m = new Manager(rs);
                 }
             }
@@ -98,6 +106,27 @@ public class ManagerDao {
             ex.printStackTrace(System.out);
         }
         return m;
+    }
+
+    /**
+     * Metodo para actualizar informacion de gerentes
+     *
+     * @param m
+     */
+    public void updateManager(Manager m) {
+        String query = "UPDATE MANAGERS SET name = ?, workday_id = ?, dpi = ?, address = ?, gender = ?, password = ? WHERE manager_id = ?";
+        try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
+            ps.setString(1, m.getName());
+            ps.setInt(2, m.getWorkDay());
+            ps.setString(3, m.getDpi());
+            ps.setString(4, m.getAddress());
+            ps.setBoolean(5, m.isGender());
+            ps.setString(6, m.getPassword());
+            ps.setInt(7, m.getManagerId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 
 }

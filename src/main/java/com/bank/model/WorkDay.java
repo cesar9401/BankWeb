@@ -13,7 +13,8 @@ public class WorkDay {
     private java.sql.Time startTime;
     private java.sql.Time endTime;
 
-    public WorkDay(String workDay, Time startTime, Time endTime) {
+    public WorkDay(int workDayId, String workDay, Time startTime, Time endTime) {
+        this.workDayId = workDayId;
         this.workDay = workDay;
         this.startTime = startTime;
         this.endTime = endTime;

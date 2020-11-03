@@ -48,7 +48,7 @@ public class ClientDao {
             ps.setInt(1, code);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
-                if(rs.next()) {
+                if (rs.next()) {
                     c = new Client(rs);
                 }
             }
@@ -56,5 +56,27 @@ public class ClientDao {
             ex.printStackTrace(System.out);
         }
         return c;
+    }
+
+    /**
+     * Metodo para actulizar informacion del cliente
+     *
+     * @param c
+     */
+    public void updateClient(Client c) {
+        String query = "UPDATE CLIENTS SET name = ?, dpi = ?, birth = ?, address = ?, gender = ?, password = ? WHERE client_id = ?";
+        try {
+            PreparedStatement ps = this.conexion.prepareStatement(query);
+            ps.setString(1, c.getName());
+            ps.setString(2, c.getDpi());
+            ps.setDate(3, c.getBirth());
+            ps.setString(4, c.getAddress());
+            ps.setBoolean(5, c.isGender());
+            ps.setString(6, c.getPassword());
+            ps.setInt(7, c.getClientId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 }

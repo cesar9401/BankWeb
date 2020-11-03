@@ -1,8 +1,8 @@
 package com.bank.control;
 
 import com.bank.conexion.Conexion;
-import com.bank.dao.ManagerDao;
-import com.bank.model.Manager;
+import com.bank.dao.*;
+import com.bank.model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -25,6 +25,8 @@ public class ManagerController extends HttpServlet {
 
     private final Connection conexion = Conexion.getConnection();
     private final ManagerDao managerDao = new ManagerDao(conexion);
+    private final ClientDao clientDao = new ClientDao(conexion);
+    private final CashierDao cashierDao = new CashierDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,6 +69,7 @@ public class ManagerController extends HttpServlet {
         String action = request.getParameter("action");
         switch (action) {
             case "takeChoice":
+                //Ir a login o cargar archivos
                 List<Manager> managers = managerDao.getManagers();
                 if (managers.isEmpty()) {
                     request.getRequestDispatcher("load-data.jsp").forward(request, response);
@@ -74,7 +77,39 @@ public class ManagerController extends HttpServlet {
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 }
                 break;
+
+            case "profile":
+                //Mostrar el perfil del gerente
+                int code = (int) request.getSession().getAttribute("code");
+                Manager manager = managerDao.getManager(code, "");
+                setProfileManager(request, response, manager);
+                break;
+                
+            case "signOff":
+                //Cerrar sesion
+                request.getSession().invalidate();
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                break;
+
+            case "updateData":
+                //Formulario para actualizar datos del gerente
+                updateManagerData(request, response);
+                break;
         }
+    }
+
+    /**
+     * Metodo para redireccionar hacia formulario para actualizar datos del
+     * gerente
+     *
+     * @param request
+     * @param response
+     */
+    private void updateManagerData(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = (int) request.getSession().getAttribute("code");
+        Manager manager = managerDao.getManager(code, "");
+        request.setAttribute("manager", manager);
+        request.getRequestDispatcher("updateData.jsp").forward(request, response);
     }
 
     /**
@@ -91,6 +126,7 @@ public class ManagerController extends HttpServlet {
         String action = request.getParameter("action");
         switch (action) {
             case "data":
+                //Cargar datos a la base de datos
                 System.out.println(action);
                 Part filePart = request.getPart("data");
                 ReadXml read = new ReadXml(filePart);
@@ -100,8 +136,8 @@ public class ManagerController extends HttpServlet {
                 break;
 
             case "signIn":
+                //Iniciar sesion
                 logIn(request, response);
-
                 break;
         }
     }
@@ -112,21 +148,53 @@ public class ManagerController extends HttpServlet {
      * @param request
      * @param response
      */
-    private void logIn(HttpServletRequest request, HttpServletResponse response) {
-        String code = request.getParameter("code");
+    private void logIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = Integer.parseInt(request.getParameter("code"));
         String password = request.getParameter("password");
         String type = request.getParameter("type");
-        
-        switch(type) {
+
+        switch (type) {
             case "manager":
+                Manager manager = managerDao.getManager(code, password);
+                if (manager != null) {
+                    request.getSession().setAttribute("code", manager.getManagerId());
+                    setProfileManager(request, response, manager);
+                } else {
+                    setErrorLogin(request, response);
+                }
                 break;
-                
+
             case "cashier":
+                Cashier cashier = cashierDao.getCashier(code, password);
+                if (cashier != null) {
+                    request.getSession().setAttribute("code", cashier.getCashierId());
+                } else {
+                    setErrorLogin(request, response);
+                }
                 break;
-                
+
             case "client":
+                Client client = clientDao.getClient(code, password);
+                if (client != null) {
+                    request.getSession().setAttribute("code", client.getClientId());
+                } else {
+                    setErrorLogin(request, response);
+                }
                 break;
         }
     }
 
+    /**
+     * Metodo para indicar que los datos ingresados para inicio de sesion son
+     * incorrectos
+     */
+    private void setErrorLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("error", true);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
+
+    private void setProfileManager(HttpServletRequest request, HttpServletResponse response, Manager manager) throws ServletException, IOException {
+        request.setAttribute("manager", manager);
+        request.getRequestDispatcher("managerView.jsp").forward(request, response);
+    }
 }

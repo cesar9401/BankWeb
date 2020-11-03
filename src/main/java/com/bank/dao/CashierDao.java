@@ -63,4 +63,25 @@ public class CashierDao {
 
         return c;
     }
+
+    /**
+     * Metodo para actualizar informacion de un cajero
+     *
+     * @param c
+     */
+    public void updateCashier(Cashier c) {
+        String query = "UDPATE CASHIERS SET name = ?, workday_id = ?, dpi = ?, address = ?, gender = ?, password = ? WHERE cashier_id = ?";
+        try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
+            ps.setString(1, c.getName());
+            ps.setInt(2, c.getWorkDay());
+            ps.setString(3, c.getDpi());
+            ps.setString(4, c.getAddress());
+            ps.setBoolean(5, c.isGender());
+            ps.setString(6, c.getPassword());
+            ps.setInt(7, c.getCashierId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
+    }
 }

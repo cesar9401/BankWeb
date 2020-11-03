@@ -45,9 +45,9 @@ public class ReadXml {
      */
     private void getWorkDays() {
         List<WorkDay> days = new ArrayList<>();
-        days.add(new WorkDay("MATUTINO", getTime("06:00:00"),getTime("14:30:00")));
-        days.add(new WorkDay("VESPERTINO", getTime("13:00:00"), getTime("22:00:00")));
-        days.add(new WorkDay("24 HORAS", getTime("00:00:00"), getTime("23:59:59")));
+        days.add(new WorkDay(1, "MATUTINO", getTime("06:00:00"),getTime("14:30:00")));
+        days.add(new WorkDay(2, "VESPERTINO", getTime("13:00:00"), getTime("22:00:00")));
+        days.add(new WorkDay(3, "24 HORAS", getTime("00:00:00"), getTime("23:59:59")));
         
         ManagerDao mDao = new ManagerDao(conexion);
         for(WorkDay w : days){
