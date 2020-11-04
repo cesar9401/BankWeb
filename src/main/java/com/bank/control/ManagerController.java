@@ -5,6 +5,7 @@ import com.bank.dao.*;
 import com.bank.model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -82,9 +83,9 @@ public class ManagerController extends HttpServlet {
                 //Mostrar el perfil del gerente
                 int code = (int) request.getSession().getAttribute("code");
                 Manager manager = managerDao.getManager(code, "");
-                setProfileManager(request, response, manager);
+                setProfileManager(request, response, manager.getManagerId());
                 break;
-                
+
             case "signOff":
                 //Cerrar sesion
                 request.getSession().invalidate();
@@ -94,6 +95,16 @@ public class ManagerController extends HttpServlet {
             case "updateData":
                 //Formulario para actualizar datos del gerente
                 updateManagerData(request, response);
+                break;
+
+            case "searchClients":
+                //Para filtrar, editar y agregar clientes
+                searchClients(request, response);
+                break;
+
+            case "addClient":
+                //Formulario para agregar un cliente y crear cuenta
+                addClient(request, response);
                 break;
         }
     }
@@ -109,7 +120,28 @@ public class ManagerController extends HttpServlet {
         int code = (int) request.getSession().getAttribute("code");
         Manager manager = managerDao.getManager(code, "");
         request.setAttribute("manager", manager);
-        request.getRequestDispatcher("updateData.jsp").forward(request, response);
+        request.getRequestDispatcher("dataForManager.jsp").forward(request, response);
+    }
+
+    /**
+     * Metodo para dirigir al formulario para buscar, agregar o editar clientes
+     *
+     * @param request
+     * @param response
+     */
+    private void searchClients(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("searchClients.jsp").forward(request, response);
+    }
+
+    /**
+     * Metodo para redirigir al fomulario para agregar cliente y cuenta
+     *
+     * @param request
+     * @param response
+     */
+    private void addClient(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("addClient", true);
+        request.getRequestDispatcher("dataForManager.jsp").forward(request, response);
     }
 
     /**
@@ -139,6 +171,21 @@ public class ManagerController extends HttpServlet {
                 //Iniciar sesion
                 logIn(request, response);
                 break;
+
+            case "updateManager":
+                //Actualizar informacion manager
+                updateDataManager(request, response);
+                break;
+
+            case "findClients":
+                //Buscar clientes
+                findClients(request, response);
+                break;
+                
+            case "insertClient":
+                //Insertar nuevo cliente en la base de datos
+                insertClient(request, response);
+                break;
         }
     }
 
@@ -158,7 +205,7 @@ public class ManagerController extends HttpServlet {
                 Manager manager = managerDao.getManager(code, password);
                 if (manager != null) {
                     request.getSession().setAttribute("code", manager.getManagerId());
-                    setProfileManager(request, response, manager);
+                    setProfileManager(request, response, manager.getManagerId());
                 } else {
                     setErrorLogin(request, response);
                 }
@@ -193,8 +240,61 @@ public class ManagerController extends HttpServlet {
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
-    private void setProfileManager(HttpServletRequest request, HttpServletResponse response, Manager manager) throws ServletException, IOException {
+    /**
+     * Metodod para mostrar perfil del gerente
+     *
+     * @param request
+     * @param response
+     * @param managerId
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void setProfileManager(HttpServletRequest request, HttpServletResponse response, int managerId) throws ServletException, IOException {
+        Manager manager = managerDao.getManager(managerId, "");
         request.setAttribute("manager", manager);
         request.getRequestDispatcher("managerView.jsp").forward(request, response);
+    }
+
+    /**
+     * Metodo para actualizar informacion del gerente
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void updateDataManager(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Crear manager
+        Manager manager = new Manager(request);
+        System.out.println(manager.toString());
+        //Actualizar en base de datos
+        managerDao.updateManager(manager);
+        request.setAttribute("update", true);
+        //Perfil del gerente
+        setProfileManager(request, response, manager.getManagerId());
+    }
+
+    /**
+     * Metodo para buscar clientes y devolverlos a la vista de busqueda
+     *
+     * @param request
+     * @param response
+     */
+    private void findClients(HttpServletRequest request, HttpServletResponse response) {
+        int type = Integer.parseInt(request.getParameter("type"));
+        String search = request.getParameter("search");
+    }
+
+    /**
+     * Metodo para insertar nuevo cliente en la base de datos
+     * @param request
+     * @param response
+     * @throws UnsupportedEncodingException 
+     */
+    private void insertClient(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ServletException, IOException {
+        Client client = new Client(request);
+        System.out.println(client.toString());
+        //Redirigir a buscar clientes
+        searchClients(request, response);
     }
 }

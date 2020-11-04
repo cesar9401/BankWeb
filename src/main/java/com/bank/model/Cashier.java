@@ -3,6 +3,7 @@ package com.bank.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import org.jdom2.Element;
 
 /**
@@ -60,6 +61,22 @@ public class Cashier extends Person{
 
     public void setWorkDayName(String workDayName) {
         this.workDayName = workDayName;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
     }
     
     @Override

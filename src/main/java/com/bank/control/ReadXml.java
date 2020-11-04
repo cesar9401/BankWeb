@@ -109,7 +109,7 @@ public class ReadXml {
         ClientDao cDao = new ClientDao(conexion);
         AccountDao aDao = new AccountDao(conexion);
         for (Client c : clients) {
-            cDao.insertClient(c);
+            cDao.insertClientData(c);
             System.out.println(c.toString());
             for (Account a : c.getAccounts()) {
                 aDao.insertAccount(a);

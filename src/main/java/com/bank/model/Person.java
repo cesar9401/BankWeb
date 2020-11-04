@@ -1,8 +1,10 @@
 
 package com.bank.model;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServletRequest;
 import org.jdom2.Element;
 
 /**
@@ -36,6 +38,14 @@ public class Person {
         this.address = rs.getString("address");
         this.gender = rs.getBoolean("gender");
         this.password = rs.getString("password");
+    }
+    
+    public Person(HttpServletRequest request) throws UnsupportedEncodingException {
+        this.name = new String(request.getParameter("name").getBytes("ISO-8859-1"), "UTF-8");
+        this.dpi = request.getParameter("dpi");
+        this.address = new String(request.getParameter("address").getBytes("ISO-8859-1"), "UTF-8");
+        this.gender = request.getParameter("gender").equals("true");
+        this.password = new String(request.getParameter("password").getBytes("ISO-8859-1"), "UTF-8");
     }
     
     public String getName() {

@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,11 +24,13 @@ public class ClientDao {
      * Metodo para insertar nuevo cliente a la base de datos
      *
      * @param c
+     * @return 
+     * @throws java.sql.SQLException 
      */
-    public void insertClient(Client c) {
+    public int insertClient(Client c) throws SQLException {
+        int client_id = 0;
         String query = "INSERT INTO CLIENTS(client_id, name, dpi, birth, address, gender, password, pdf_dpi) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement ps = this.conexion.prepareStatement(query);
+        try (PreparedStatement ps = this.conexion.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, c.getClientId());
             ps.setString(2, c.getName());
             ps.setString(3, c.getDpi());
@@ -36,10 +40,24 @@ public class ClientDao {
             ps.setString(7, c.getPassword());
             ps.setBlob(8, c.getPdfDpi());
             ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+                client_id = rs.getInt(1);
+            }
+        }
+        
+        return client_id;
+    }
+    
+    public void insertClientData(Client c) {
+        try {
+            insertClient(c);
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         }
     }
+    
 
     public Client getClient(int code, String password) {
         String query = "SELECT * FROM CLIENTS WHERE client_id = ? AND password = ?";
