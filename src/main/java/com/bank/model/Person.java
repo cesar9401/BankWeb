@@ -17,6 +17,7 @@ public class Person {
     private String address;
     private boolean gender;
     private String password;
+    private String sex;
     
     public Person(Element e) {
         this.name = e.getChildText("NOMBRE");
@@ -38,6 +39,7 @@ public class Person {
         this.address = rs.getString("address");
         this.gender = rs.getBoolean("gender");
         this.password = rs.getString("password");
+        this.sex = this.gender ? "Masculino" : "Femenino";
     }
     
     public Person(HttpServletRequest request) throws UnsupportedEncodingException {
@@ -88,6 +90,14 @@ public class Person {
         this.password = password;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+    
     @Override
     public String toString() {
         return "Person{" + "name=" + name + ", dpi=" + dpi + ", address=" + address + ", gender=" + gender + ", password=" + password + '}';

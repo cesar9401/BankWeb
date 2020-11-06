@@ -112,7 +112,7 @@ public class ReadXml {
             cDao.insertClientData(c);
             System.out.println(c.toString());
             for (Account a : c.getAccounts()) {
-                aDao.insertAccount(a);
+                aDao.insertNewAccount(a);
                 System.out.println(a.toString());
             }
         }

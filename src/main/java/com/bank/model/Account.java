@@ -3,6 +3,8 @@ package com.bank.model;
 
 import com.bank.control.ReadXml;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.jdom2.Element;
 
 /**
@@ -29,11 +31,17 @@ public class Account {
     private String status;
     private int tryNumber;
 
-    Account(Element i, int clientId) {
+    public Account(Element i, int clientId) {
         this.accountId = Integer.parseInt(i.getChildText("CODIGO"));
         this.createdOn = ReadXml.getDate(i.getChildText("CREADA"));
         this.credit = Double.parseDouble(i.getChildText("CREDITO"));
         this.clientId = clientId;
+    }
+    
+    public Account(ResultSet rs) throws SQLException {
+        this.accountId = rs.getInt("account_id");
+        this.createdOn = rs.getDate("created_on");
+        this.credit = rs.getDouble("credit");
     }
 
     public int getAccountId() {

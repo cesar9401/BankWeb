@@ -47,11 +47,16 @@ public class CashierDao {
      * @return
      */
     public Cashier getCashier(int user, String password) {
-        String query = "SELECT c.*, w.workday, w.start_time, w.end_time FROM CASHIERS c INNER JOIN WORKDAYS w ON c.workday_id = w.workday_id WHERE c.cashier_id = ? AND c.password = ?";
+        String query = "SELECT c.*, w.workday, w.start_time, w.end_time FROM CASHIERS c INNER JOIN WORKDAYS w ON c.workday_id = w.workday_id WHERE c.cashier_id = ?";
+        if (!password.equals("")) {
+            query += " AND c.password = ?";
+        }
         Cashier c = null;
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, user);
-            ps.setString(2, password);
+            if (!password.equals("")) {
+                ps.setString(2, password);
+            }
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     c = new Cashier(rs);

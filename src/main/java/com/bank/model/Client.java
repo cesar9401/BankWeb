@@ -47,19 +47,21 @@ public class Client extends Person {
         this.birth = rs.getDate("birth");
     }
 
-    public Client(HttpServletRequest request) throws UnsupportedEncodingException {
+    public Client(HttpServletRequest request, boolean isNew) throws UnsupportedEncodingException {
         super(request);
         this.clientId = Integer.parseInt(request.getParameter("code"));
         this.birth = ReadXml.getDate(request.getParameter("birth"));
-        this.createdOn = ReadXml.getDate(request.getParameter("created-on"));
-        
-        Part filePart;
-        try {
-            filePart = request.getPart("pdf");
-            this.pdfDpi = filePart.getInputStream();
-            System.out.println("filePart: " + filePart.getSubmittedFileName());
-        } catch (IOException | ServletException ex) {
-            ex.printStackTrace(System.out);
+
+        if (isNew) {
+            this.createdOn = ReadXml.getDate(request.getParameter("created-on"));
+            Part filePart;
+            try {
+                filePart = request.getPart("pdf");
+                this.pdfDpi = filePart.getInputStream();
+                System.out.println("filePart: " + filePart.getSubmittedFileName());
+            } catch (IOException | ServletException ex) {
+                ex.printStackTrace(System.out);
+            }
         }
     }
 

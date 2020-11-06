@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -28,6 +29,7 @@ public class ManagerController extends HttpServlet {
     private final ManagerDao managerDao = new ManagerDao(conexion);
     private final ClientDao clientDao = new ClientDao(conexion);
     private final CashierDao cashierDao = new CashierDao(conexion);
+    private final AccountDao accountDao = new AccountDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -106,6 +108,15 @@ public class ManagerController extends HttpServlet {
                 //Formulario para agregar un cliente y crear cuenta
                 addClient(request, response);
                 break;
+
+            case "getDPI":
+                int clientId = Integer.parseInt(request.getParameter("clientId"));
+                clientDao.getDPI(response, clientId);
+                break;
+
+            case "requestUpdateClient":
+                requestUpdateClient(request, response);
+                break;
         }
     }
 
@@ -141,6 +152,20 @@ public class ManagerController extends HttpServlet {
      */
     private void addClient(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("addClient", true);
+        request.getRequestDispatcher("dataForManager.jsp").forward(request, response);
+    }
+
+    /**
+     * Metodo para llevar la informacion del cliente al formulario para
+     * actualizar datos
+     *
+     * @param request
+     * @param response
+     */
+    private void requestUpdateClient(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clientId = Integer.parseInt(request.getParameter("clientId"));
+        Client client = clientDao.getClient(clientId, "");
+        request.setAttribute("client", client);
         request.getRequestDispatcher("dataForManager.jsp").forward(request, response);
     }
 
@@ -181,10 +206,14 @@ public class ManagerController extends HttpServlet {
                 //Buscar clientes
                 findClients(request, response);
                 break;
-                
+
             case "insertClient":
                 //Insertar nuevo cliente en la base de datos
                 insertClient(request, response);
+                break;
+
+            case "updateClient":
+                updateClient(request, response);
                 break;
         }
     }
@@ -280,21 +309,65 @@ public class ManagerController extends HttpServlet {
      * @param request
      * @param response
      */
-    private void findClients(HttpServletRequest request, HttpServletResponse response) {
+    private void findClients(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int type = Integer.parseInt(request.getParameter("type"));
         String search = request.getParameter("search");
+        //Obtener clientes de la base de datos
+        List<Client> clients = clientDao.getClients(type, search);
+
+        //Atributos para vista
+        request.setAttribute("type", type);
+        request.setAttribute("search", search);
+        request.setAttribute("clients", clients);
+
+        searchClients(request, response);
     }
 
     /**
      * Metodo para insertar nuevo cliente en la base de datos
+     *
      * @param request
      * @param response
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     private void insertClient(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ServletException, IOException {
-        Client client = new Client(request);
+        Client client = new Client(request, true);
         System.out.println(client.toString());
+        //Insertar en la base de datos y obtener id y numero de cuentas del ciente
+        int clientId = clientDao.createClientAndAccount(client);
+
+        //Obtener cliente y cuentas de DB
+        client = clientDao.getClient(clientId, "");
+        System.out.println(client.toString());
+        client.setAccounts(accountDao.getAccounts(clientId));
+
+        //setear atributo
+        request.setAttribute("newClient", client);
+
+        System.out.println("Cliente agregado");
+        System.out.println(client.toString());
+        System.out.println(client.getAccounts().get(0).toString());
+
         //Redirigir a buscar clientes
         searchClients(request, response);
     }
+
+    /**
+     * Metodo para actualizar informacion de cliente en la base de datos
+     *
+     * @param request
+     * @param response
+     */
+    private void updateClient(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ServletException, IOException {
+        Client client = new Client(request, false);
+        //Actualizar en la base de datos
+        clientDao.updateClient(client);
+        //Obtener de DB
+        client = clientDao.getClient(client.getClientId(), "");
+        //Enviar atributo
+        request.setAttribute("updateClient", client);
+        //Redigir a la vista de buscar clientes
+        searchClients(request, response);
+    }
+
 }

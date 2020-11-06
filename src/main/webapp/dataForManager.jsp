@@ -87,12 +87,12 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="pdf">PDF(DPI)</label>
-                                        <input type="file" class="form-control" id="pdf" name="pdf" required>
+                                        <input type="file" class="form-control" accept=".pdf" id="pdf" name="pdf" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-2 offset-md-5 my-4">
-                                        <button type="submit" class="btn btn-danger btn-lg btn-block" id="button-data" name="action" value="updateManager">Actualizar</button>
+                                        <button type="submit" class="btn btn-danger btn-lg btn-block" id="button-data" name="action" value="updateManager">Actualizar Gerente</button>
                                     </div>
                                 </div>
                             </form>
@@ -106,20 +106,21 @@
         <c:choose>
             <c:when test="${manager != null}">
                 <script>
-                    $('#code').val("${manager.managerId}");
-                    $('#name').val("${manager.name}");
-                    $('#dpi').val("${manager.dpi}");
+
                     $('#fecha').prop('hidden', true);
                     $('#birth').prop('required', false);
                     $('#jornada').prop('hidden', false);
-                    $('#gender').val('${manager.gender}');
-                    $('#workday').val('${manager.workDay}');
-                    $('#address').val('${manager.address}');
-                    $('#password').val('${manager.password}');
                     $('#title-account').prop("hidden", true);
                     $('#info-account').prop("hidden", true);
                     $('#created-on').prop("required", false);
                     $('#pdf').prop("required", false);
+                    $('#code').val("${manager.managerId}");
+                    $('#name').val("${manager.name}");
+                    $('#dpi').val("${manager.dpi}");
+                    $('#gender').val('${manager.gender}');
+                    $('#workday').val('${manager.workDay}');
+                    $('#address').val('${manager.address}');
+                    $('#password').val('${manager.password}');
                 </script>
             </c:when>
             <c:when test="${addClient != null}">
@@ -137,7 +138,28 @@
                     $('#info-account').prop("hidden", false);
                     $('#pdf').prop("required", true);
                     $('#button-data').prop("value", "insertClient");
-                    $('#button-data').text("Agregar");
+                    $('#button-data').text("Agregar Cliente");
+                </script>
+            </c:when>
+
+            <c:when test="${client != null}">
+                <script>
+                    $('#title-data').text("Editar Cliente");
+                    $('#for-code').prop("hidden", false);
+                    $('#fecha').prop("hidden", false);
+                    $('#workday').prop("required", false);
+                    $('#created-on').prop("required", false);
+                    $('#pdf').prop("required", false);
+                    $('#button-data').prop("value", "updateClient");
+                    $('#button-data').text("Actualizar Cliente");
+
+                    $('#code').val("${client.clientId}");
+                    $('#name').val("${client.name}");
+                    $('#dpi').val("${client.dpi}");
+                    $('#birth').val("${client.birth}");
+                    $('#gender').val('${client.gender}');
+                    $('#address').val('${client.address}');
+                    $('#password').val('${client.password}');
                 </script>
             </c:when>
         </c:choose>
