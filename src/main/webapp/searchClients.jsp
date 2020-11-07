@@ -106,7 +106,7 @@
                                             <a href="ManagerController?action=requestUpdateClient&clientId=${c.clientId}" class="btn btn-light">Editar</a>
                                         </div>
                                         <div class="col-4 text-center">
-                                            <a href="#" class="btn btn-light">Agregar Cuenta</a>
+                                            <a href="#" onclick="setClientId('${c.name}', '${c.clientId}')" class="btn btn-light" id="link-account" data-toggle="modal" data-target="#modal-account">Agregar Cuenta</a>
                                         </div>
                                         <div class="col-4 text-center">
                                             <a href="ManagerController?action=getDPI&clientId=${c.clientId}" target="_blank" class="btn btn-light">Ver DPI</a>
@@ -127,7 +127,7 @@
                     <div class="col">
                         <div class="card p-4">
                             <div class="card-header text-center">
-                                <h2 class="text-danger">Nuevo Cliente</h2>
+                                <h2 id="title-new-client" class="text-danger">Nuevo Cliente</h2>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -218,7 +218,7 @@
                                         <a href="#" id="link-edit" class="btn btn-danger">Editar</a>
                                     </div>
                                     <div class="col text-center">
-                                        <a href="#" class="btn btn-danger">Agregar Cuenta</a>
+                                        <a href="#" class="btn btn-danger" id="link-account" data-toggle="modal" data-target="#modal-account">Agregar Cuenta</a>
                                     </div>
                                     <div class="col text-center">
                                         <a href="#" id="link-dpi" target="_blank" class="btn btn-danger">Ver DPI</a>
@@ -231,7 +231,40 @@
             </div>
         </section>
 
-        <!-- Modal -->
+        <!-- Modal para agregar cuentas-->
+        <div class="modal fade" id="modal-account" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Agregar Cuenta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="ManagerController" method="post">
+                            <div class="form-group">
+                                <label for="name-account">Nombre</label>
+                                <input type="text" class="form-control" id="name-account" name="name-account" placeholder="Nombre" readonly required>
+                                <input type="hidden" id="id-account" name="id-account" value="0">
+                                <input type="hidden" id="credit-account" name="credit-account" value="0">
+                                <input type="hidden" id="client-id-account" name="client-id-account">
+                            </div>
+                            <div class="form-group">
+                                <label for="created-on-account">Fecha de Creaci&oacute;n</label>
+                                <input type="date" class="form-control" id="created-on-account" name="created-on-account" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger" id="btn-submit" name="action" value="insertAccount">Agregar Cuenta</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal informacion-->
         <div class="modal fade" id="modalManager" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -272,7 +305,16 @@
             <c:choose>
                 <c:when test="${newClient != null}">
                 $('#new-client').attr("hidden", false);
+                    <c:choose>
+                        <c:when test="${newAccount != null}">
+                $('#title-new-client').text("Nueva Cuenta");
+                $('#info').text("Se ha agregado correctamente una cuenta para el cliente ${newClient.name}");
+                        </c:when>
+                        <c:otherwise>
+                $('#title-new-client').text("Nuevo Cliente");
                 $('#info').text("Se ha agregado correctamente al cliente ${newClient.name}");
+                        </c:otherwise>
+                    </c:choose>
                 $('#modalManager').modal('show');
                 $('#account-info').attr("hidden", false);
                 //Setear datos
@@ -288,6 +330,7 @@
                 //Enlaces
                 $('#link-edit').attr("href", "ManagerController?action=requestUpdateClient&clientId=${newClient.clientId}");
                 $('#link-dpi').attr("href", "ManagerController?action=getDPI&clientId=${newClient.clientId}");
+                $('#link-account').attr("onclick", "setClientId('${newClient.name}', '${newClient.clientId}')");
                 </c:when>
 
                 <c:when test="${clients != null}">
@@ -310,8 +353,14 @@
                 //Enlaces
                 $('#link-edit').attr("href", "ManagerController?action=requestUpdateClient&clientId=${updateClient.clientId}");
                 $('#link-dpi').attr("href", "ManagerController?action=getDPI&clientId=${updateClient.clientId}");
+                $('#link-account').attr("onclick", "setClientId('${updateClient.name}', '${updateClient.clientId}')");
                 </c:when>
             </c:choose>
+            };
+
+            const setClientId = function (nameClient, clientId) {
+                $('#name-account').val(nameClient);
+                $('#client-id-account').val(clientId);
             };
         </script>
     </body>

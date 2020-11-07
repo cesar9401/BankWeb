@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -16,9 +17,11 @@ import java.util.List;
 public class ManagerDao {
 
     private final Connection conexion;
+    private final Base64 base64;
 
     public ManagerDao(Connection conexion) {
         this.conexion = conexion;
+        this.base64 = new Base64();
     }
 
     /**
@@ -53,7 +56,7 @@ public class ManagerDao {
             ps.setString(4, m.getDpi());
             ps.setString(5, m.getAddress());
             ps.setBoolean(6, m.isGender());
-            ps.setString(7, m.getPassword());
+            ps.setString(7, new String(base64.encode(m.getPassword().getBytes())));
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -95,7 +98,7 @@ public class ManagerDao {
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, user);
             if (!password.equals("")) {
-                ps.setString(2, password);
+                ps.setString(2, new String(base64.encode(password.getBytes())));
             }
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -121,7 +124,7 @@ public class ManagerDao {
             ps.setString(3, m.getDpi());
             ps.setString(4, m.getAddress());
             ps.setBoolean(5, m.isGender());
-            ps.setString(6, m.getPassword());
+            ps.setString(6, new String(base64.encode(m.getPassword().getBytes())));
             ps.setInt(7, m.getManagerId());
             ps.executeUpdate();
         } catch (SQLException ex) {

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -13,9 +14,11 @@ import java.sql.SQLException;
 public class CashierDao {
 
     private final Connection conexion;
+    private final Base64 base64;
 
     public CashierDao(Connection conexion) {
         this.conexion = conexion;
+        this.base64 = new Base64();
     }
 
     /**
@@ -32,7 +35,7 @@ public class CashierDao {
             ps.setString(4, c.getDpi());
             ps.setString(5, c.getAddress());
             ps.setBoolean(6, c.isGender());
-            ps.setString(7, c.getPassword());
+            ps.setString(7, new String(base64.encode(c.getPassword().getBytes())));
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -55,7 +58,7 @@ public class CashierDao {
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, user);
             if (!password.equals("")) {
-                ps.setString(2, password);
+                ps.setString(2, new String(base64.encode(password.getBytes())));
             }
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -82,7 +85,7 @@ public class CashierDao {
             ps.setString(3, c.getDpi());
             ps.setString(4, c.getAddress());
             ps.setBoolean(5, c.isGender());
-            ps.setString(6, c.getPassword());
+            ps.setString(6, new String(base64.encode(c.getPassword().getBytes())));
             ps.setInt(7, c.getCashierId());
             ps.executeUpdate();
         } catch (SQLException ex) {

@@ -15,7 +15,7 @@
 
         <jsp:include page="WEB-INF/navManager.jsp"></jsp:include>
 
-            <section id="update">
+        <section id="update">
                 <div class="container">
                     <div class="row mb-4">
                         <div class="col text-center">

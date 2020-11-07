@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.codec.binary.Base64;
 import org.jdom2.Element;
 
 /**
@@ -34,11 +35,13 @@ public class Person {
     }
     
     public Person(ResultSet rs) throws SQLException {
+        Base64 base64 = new Base64();
         this.name = rs.getString("name");
         this.dpi = rs.getString("dpi");
         this.address = rs.getString("address");
         this.gender = rs.getBoolean("gender");
         this.password = rs.getString("password");
+        this.password = new String(base64.decode(this.password.getBytes()));
         this.sex = this.gender ? "Masculino" : "Femenino";
     }
     

@@ -1,10 +1,10 @@
-
 package com.bank.model;
 
 import com.bank.control.ReadXml;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServletRequest;
 import org.jdom2.Element;
 
 /**
@@ -12,24 +12,32 @@ import org.jdom2.Element;
  * @author cesar31
  */
 public class Account {
+
     private int accountId;
     private java.sql.Date createdOn;
     private Double credit;
+
+    //Datos cliente
+    private String name;
+    private int clientId;
+
+    //Datos para cuentas asociadas
+    private int associatedId;
+    private String status;
+    private int tryNumber;
 
     public Account(int accountId, Date createdOn, Double credit) {
         this.accountId = accountId;
         this.createdOn = createdOn;
         this.credit = credit;
     }
-    
-    //Datos cliente
-    private String name;
-    private int clientId;
-    
-    //Datos para cuentas asociadas
-    private int associatedId;
-    private String status;
-    private int tryNumber;
+
+    public Account(HttpServletRequest request) {
+        this.accountId = Integer.parseInt(request.getParameter("id-account"));
+        this.credit = Double.parseDouble(request.getParameter("credit-account"));
+        this.createdOn = ReadXml.getDate(request.getParameter("created-on-account"));
+        this.clientId = Integer.parseInt(request.getParameter("client-id-account"));
+    }
 
     public Account(Element i, int clientId) {
         this.accountId = Integer.parseInt(i.getChildText("CODIGO"));
@@ -37,7 +45,7 @@ public class Account {
         this.credit = Double.parseDouble(i.getChildText("CREDITO"));
         this.clientId = clientId;
     }
-    
+
     public Account(ResultSet rs) throws SQLException {
         this.accountId = rs.getInt("account_id");
         this.createdOn = rs.getDate("created_on");
@@ -107,7 +115,7 @@ public class Account {
     public void setTryNumber(int tryNumber) {
         this.tryNumber = tryNumber;
     }
-    
+
     @Override
     public String toString() {
         return "Account{" + "accountId=" + accountId + ", createdOn=" + createdOn + ", credit=" + credit + '}';

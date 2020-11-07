@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -48,7 +50,6 @@ public class AccountDao {
                 ps1.executeUpdate();
             }
         }
-
         return accountId;
     }
 
@@ -56,13 +57,16 @@ public class AccountDao {
      * Metodo para insertar nueva cuenta caputurando las excepciones
      *
      * @param a
+     * @return
      */
-    public void insertNewAccount(Account a) {
+    public int insertNewAccount(Account a) {
+        int accountId = 0;
         try {
-            insertAccount(a);
+            accountId = insertAccount(a);
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         }
+        return accountId;
     }
 
     public List<Account> getAccounts(int clientId) {
@@ -71,7 +75,7 @@ public class AccountDao {
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, clientId);
             try (ResultSet rs = ps.executeQuery()) {
-                while(rs.next()) {
+                while (rs.next()) {
                     accounts.add(new Account(rs));
                 }
             }
@@ -80,5 +84,22 @@ public class AccountDao {
         }
 
         return accounts;
+    }
+
+    public Account getAccount(int accountId) {
+        Account account = null;
+        String query = "SELECT * FROM ACCOUNTS WHERE account_id = ?";
+        try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
+            ps.setInt(1, accountId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if(rs.next()) {
+                    account = new Account(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
+
+        return account;
     }
 }

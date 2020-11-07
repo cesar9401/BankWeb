@@ -4,7 +4,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <%@include file="css.html" %>
+        <%@include file="resources/css.html" %>
+        <link href="resources/style.css" rel="stylesheet">
         <link href="resources/img/banking.png" rel="icon" type="image/png">
         <title>Carga de Datos</title>
     </head>
@@ -36,6 +37,6 @@
             </div>
         </section>
 
-        <%@include file="js.html" %>
+        <%@include file="resources/js.html" %>
     </body>
 </html>

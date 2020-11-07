@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -20,9 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 public class ClientDao {
 
     private final Connection conexion;
+    private final Base64 base64;
 
     public ClientDao(Connection conexion) {
         this.conexion = conexion;
+        this.base64 = new Base64();
     }
 
     /**
@@ -42,7 +45,7 @@ public class ClientDao {
             ps.setDate(4, c.getBirth());
             ps.setString(5, c.getAddress());
             ps.setBoolean(6, c.isGender());
-            ps.setString(7, c.getPassword());
+            ps.setString(7, new String(base64.encode(c.getPassword().getBytes())));
             ps.setBlob(8, c.getPdfDpi());
             ps.executeUpdate();
 
@@ -114,7 +117,7 @@ public class ClientDao {
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, code);
             if (!password.equals("")) {
-                ps.setString(2, password);
+                ps.setString(2, new String(base64.encode(password.getBytes())));
             }
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -183,7 +186,7 @@ public class ClientDao {
             ps.setDate(3, c.getBirth());
             ps.setString(4, c.getAddress());
             ps.setBoolean(5, c.isGender());
-            ps.setString(6, c.getPassword());
+            ps.setString(6, new String(base64.encode(c.getPassword().getBytes())));
             ps.setInt(7, c.getClientId());
             ps.executeUpdate();
         } catch (SQLException ex) {

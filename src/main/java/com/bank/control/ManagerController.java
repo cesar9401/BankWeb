@@ -215,6 +215,10 @@ public class ManagerController extends HttpServlet {
             case "updateClient":
                 updateClient(request, response);
                 break;
+
+            case "insertAccount":
+                insertAccount(request, response);
+                break;
         }
     }
 
@@ -360,6 +364,7 @@ public class ManagerController extends HttpServlet {
      */
     private void updateClient(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ServletException, IOException {
         Client client = new Client(request, false);
+        System.out.println(client.toString());
         //Actualizar en la base de datos
         clientDao.updateClient(client);
         //Obtener de DB
@@ -370,4 +375,35 @@ public class ManagerController extends HttpServlet {
         searchClients(request, response);
     }
 
+    /**
+     * Metodo para insertar una cuenta nueva a un cliente que ya esta en el
+     * sistema
+     *
+     * @param request
+     * @param response
+     */
+    private void insertAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Obtener informacion de cuenta en formulario
+        Account account = new Account(request);
+        System.out.println(account.toString());
+        System.out.println(account.getClientId());
+
+        //Insertar en la base de datos
+        int accountId = accountDao.insertNewAccount(account);
+
+        //Obtener cliente de base de datos
+        Client client = clientDao.getClient(account.getClientId(), "");
+        client.setAccounts(new ArrayList<Account>());
+        client.getAccounts().add(accountDao.getAccount(accountId));
+        //Enviar atributo
+        request.setAttribute("newClient", client);
+        request.setAttribute("newAccount", true);
+
+        System.out.println("Cuenta agregada");
+        System.out.println(client.toString());
+        System.out.println(client.getAccounts().get(0).toString());
+
+        //Redirigir a buscar clientes
+        searchClients(request, response);
+    }
 }
