@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -31,23 +29,17 @@ public class AccountDao {
      */
     public int insertAccount(Account a) throws SQLException {
         int accountId = 0;
-        String queryAccount = "INSERT INTO ACCOUNTS(account_id, created_on, credit) VALUES(?, ?, ?)";
-        String queryAccountC = "INSERT INTO CLIENTS_ACCOUNTS(client_id, account_id) VALUES(?, ?)";
+        String queryAccount = "INSERT INTO ACCOUNTS(account_id, client_id, created_on, credit) VALUES(?, ?, ?, ?)";
         try (PreparedStatement ps = this.conexion.prepareStatement(queryAccount, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, a.getAccountId());
-            ps.setDate(2, a.getCreatedOn());
-            ps.setDouble(3, a.getCredit());
+            ps.setInt(2, a.getClientId());
+            ps.setDate(3, a.getCreatedOn());
+            ps.setDouble(4, a.getCredit());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 accountId = rs.getInt(1);
-            }
-
-            try (PreparedStatement ps1 = this.conexion.prepareStatement(queryAccountC)) {
-                ps1.setInt(1, a.getClientId());
-                ps1.setInt(2, accountId);
-                ps1.executeUpdate();
             }
         }
         return accountId;
@@ -71,7 +63,7 @@ public class AccountDao {
 
     public List<Account> getAccounts(int clientId) {
         List<Account> accounts = new ArrayList<>();
-        String query = "SELECT a.* FROM ACCOUNTS a INNER JOIN CLIENTS_ACCOUNTS ca ON a.account_id = ca.account_id WHERE ca.client_id = ?";
+        String query = "SELECT * FROM ACCOUNTS WHERE client_id = ?";
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, clientId);
             try (ResultSet rs = ps.executeQuery()) {

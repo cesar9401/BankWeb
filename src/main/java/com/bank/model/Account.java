@@ -48,6 +48,7 @@ public class Account {
 
     public Account(ResultSet rs) throws SQLException {
         this.accountId = rs.getInt("account_id");
+        this.clientId = rs.getInt("client_id");
         this.createdOn = rs.getDate("created_on");
         this.credit = rs.getDouble("credit");
     }

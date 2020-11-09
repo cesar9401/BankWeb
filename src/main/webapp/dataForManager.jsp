@@ -15,18 +15,18 @@
 
         <jsp:include page="WEB-INF/navManager.jsp"></jsp:include>
 
-        <section id="update">
+            <section id="update">
                 <div class="container">
                     <div class="row mb-4">
                         <div class="col text-center">
-                            <h1 class="display-4 text-danger" id="title-data" >Actualizar Datos</h1>
+                            <h1 class="display-4 text-danger mt-4" id="title-data" >Actualizar Datos</h1>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col">
                             <!--Formulario-->
-                            <form action="ManagerController" method="post" enctype="multipart/form-data">
+                            <form id="form-for-manager" action="ManagerController" method="post" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <div class="form-group col-md-4" id="for-code">
                                         <label for="code">C&oacute;digo</label>
@@ -106,7 +106,6 @@
         <c:choose>
             <c:when test="${manager != null}">
                 <script>
-
                     $('#fecha').prop('hidden', true);
                     $('#birth').prop('required', false);
                     $('#jornada').prop('hidden', false);
@@ -160,6 +159,25 @@
                     $('#gender').val('${client.gender}');
                     $('#address').val('${client.address}');
                     $('#password').val('${client.password}');
+                </script>
+            </c:when>
+
+            <c:when test="${addCashier != null}">
+                <script>
+                    $('#form-for-manager').prop("action", "ManagerCashController");
+                    $('#title-data').text("Agregar Cajero");
+                    $('#for-code').prop("hidden", true);
+                    $('#for-name').removeClass("col-md-8");
+                    $('#for-name').addClass("col-md-12");
+                    $('#fecha').prop('hidden', true);
+                    $('#birth').prop('required', false);
+                    $('#jornada').prop('hidden', false);
+                    $('#title-account').prop("hidden", true);
+                    $('#info-account').prop("hidden", true);
+                    $('#created-on').prop("required", false);
+                    $('#pdf').prop("required", false);
+                    $('#button-data').prop("value", "insertCashier");
+                    $('#button-data').text("Agregar Cajero");
                 </script>
             </c:when>
         </c:choose>

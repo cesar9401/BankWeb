@@ -10,7 +10,7 @@
                     <a class="nav-link" href="#">Enlace 1<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Enlace 2</a>
+                    <a class="nav-link" href="ManagerCashController?action=searchCashiers">Cajeros</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="ManagerController?action=searchClients">Clientes</a>

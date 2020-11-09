@@ -14,8 +14,15 @@
         <!--Navbar-->
         <jsp:include page="WEB-INF/navManager.jsp"></jsp:include>
 
+            <!--Formulario para busqueda de clientes-->
             <section id="search-clients">
                 <div class="container">
+                    <div class="row">
+                        <div class="col text-center my-2">
+                            <h1 class="text-danger display-4">Clientes</h1>
+                        </div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col">
                             <form action="ManagerController" method="post">

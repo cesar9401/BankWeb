@@ -88,7 +88,7 @@ public class ClientDao {
             AccountDao aDao = new AccountDao(conexion);
             aDao.insertAccount(a);
             this.conexion.commit();
-
+            this.conexion.setAutoCommit(true);
         } catch (SQLException ex) {
             try {
                 this.conexion.rollback();
