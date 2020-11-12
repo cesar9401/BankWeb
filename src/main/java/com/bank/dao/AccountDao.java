@@ -61,6 +61,12 @@ public class AccountDao {
         return accountId;
     }
 
+    /**
+     * Obtener listado de cuentas del determinado cliente
+     *
+     * @param clientId
+     * @return
+     */
     public List<Account> getAccounts(int clientId) {
         List<Account> accounts = new ArrayList<>();
         String query = "SELECT * FROM ACCOUNTS WHERE client_id = ?";
@@ -78,20 +84,26 @@ public class AccountDao {
         return accounts;
     }
 
+    /**
+     * Obtener cuenta segun id
+     *
+     * @param accountId
+     * @return
+     */
     public Account getAccount(int accountId) {
         Account account = null;
-        String query = "SELECT * FROM ACCOUNTS WHERE account_id = ?";
+        String query = "SELECT a.*, name FROM ACCOUNTS a INNER JOIN CLIENTS c ON a.client_id = c.client_id WHERE account_id = ?";
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, accountId);
             try (ResultSet rs = ps.executeQuery()) {
-                if(rs.next()) {
+                if (rs.next()) {
                     account = new Account(rs);
+                    account.setName(rs.getString("name"));
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         }
-
         return account;
     }
 }

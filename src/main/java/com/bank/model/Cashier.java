@@ -1,9 +1,11 @@
 
 package com.bank.model;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import javax.servlet.http.HttpServletRequest;
 import org.jdom2.Element;
 
 /**
@@ -37,6 +39,12 @@ public class Cashier extends Person{
         this.workDayName = rs.getString("workday");
         this.startTime = rs.getTime("start_time");
         this.endTime = rs.getTime("end_time");
+    }
+    
+    public Cashier(HttpServletRequest request) throws UnsupportedEncodingException {
+        super(request);
+        this.cashierId = Integer.parseInt(request.getParameter("code"));
+        this.workDay = Integer.parseInt(request.getParameter("workday"));
     }
     
     public int getCashierId() {

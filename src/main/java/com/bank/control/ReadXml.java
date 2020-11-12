@@ -91,7 +91,7 @@ public class ReadXml {
         
         CashierDao cDao = new CashierDao(conexion);
         for (Cashier c : cashiers) {
-            cDao.insertCashier(c);
+            cDao.insertCashier(c, false);
             System.out.println(c.toString());
         }
     }
@@ -181,7 +181,7 @@ public class ReadXml {
     public static java.sql.Time getTime(String source) {
         java.sql.Time time = null;
         try {
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             Long ms = format.parse(source).getTime();
             time = new java.sql.Time(ms);
         } catch (ParseException ex) {

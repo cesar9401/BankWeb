@@ -180,6 +180,30 @@
                     $('#button-data').text("Agregar Cajero");
                 </script>
             </c:when>
+
+            <c:when test="${cashier != null}">
+                <script>
+                    $('#form-for-manager').prop("action", "ManagerCashController");
+                    $('#title-data').text("Editar Cajero");
+                    $('#for-code').prop("hidden", false);
+                    $('#fecha').prop('hidden', true);
+                    $('#birth').prop('required', false);
+                    $('#jornada').prop('hidden', false);
+                    $('#title-account').prop("hidden", true);
+                    $('#info-account').prop("hidden", true);
+                    $('#created-on').prop("required", false);
+                    $('#pdf').prop("required", false);
+                    $('#code').val("${cashier.cashierId}");
+                    $('#name').val("${cashier.name}");
+                    $('#dpi').val("${cashier.dpi}");
+                    $('#gender').val('${cashier.gender}');
+                    $('#workday').val('${cashier.workDay}');
+                    $('#address').val('${cashier.address}');
+                    $('#password').val('${cashier.password}');
+                    $('#button-data').prop("value", "updateCashier");
+                    $('#button-data').text("Editar Cajero");
+                </script>
+            </c:when>
         </c:choose>
     </body>
 </html>

@@ -248,6 +248,8 @@ public class ManagerController extends HttpServlet {
                 Cashier cashier = cashierDao.getCashier(code, password);
                 if (cashier != null) {
                     request.getSession().setAttribute("code", cashier.getCashierId());
+                    request.setAttribute("cashier", cashier);
+                    request.getRequestDispatcher("cashierView.jsp").forward(request, response);
                 } else {
                     setErrorLogin(request, response);
                 }

@@ -130,6 +130,13 @@ public class ClientDao {
         return c;
     }
 
+    /**
+     * Metodo para obtener clientes segun ciertos parametros
+     *
+     * @param type
+     * @param search
+     * @return
+     */
     public List<Client> getClients(int type, String search) {
         List<Client> clients = new ArrayList<>();
         String query = "SELECT * FROM CLIENTS";

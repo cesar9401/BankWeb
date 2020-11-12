@@ -1,9 +1,9 @@
-
 package com.bank.model;
 
 import com.bank.control.ReadXml;
 import java.sql.Date;
 import java.sql.Time;
+import javax.servlet.http.HttpServletRequest;
 import org.jdom2.Element;
 
 /**
@@ -11,6 +11,7 @@ import org.jdom2.Element;
  * @author cesar31
  */
 public class Transaction {
+
     private int transactionId;
     private int accountId;
     private java.sql.Date createdOn;
@@ -19,7 +20,7 @@ public class Transaction {
     private Double amount;
     private int cashierId;
     private Double balance;
-    
+
     private String cashierName;
     private String clientName;
 
@@ -31,6 +32,16 @@ public class Transaction {
         this.type = e.getChildText("TIPO");
         this.amount = Double.parseDouble(e.getChildText("MONTO"));
         this.cashierId = Integer.parseInt(e.getChildText("CAJERO"));
+    }
+
+    public Transaction(HttpServletRequest request) {
+        this.transactionId = Integer.parseInt(request.getParameter("transactionId"));
+        this.accountId = Integer.parseInt(request.getParameter("accountId"));
+        this.createdOn = ReadXml.getDate(request.getParameter("created-on"));
+        this.createAt = ReadXml.getTime(request.getParameter("created-at"));
+        this.type = request.getParameter("type");
+        this.amount = Double.parseDouble(request.getParameter("amount"));
+        this.cashierId = Integer.parseInt(request.getParameter("cashierId"));
     }
 
     public int getTransactionId() {
