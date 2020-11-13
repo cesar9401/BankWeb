@@ -13,6 +13,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.Part;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -26,10 +28,12 @@ import org.jdom2.input.SAXBuilder;
 public class ReadXml {
 
     private final Part filePart;
+    private final ArrayList<Part> filePdfs;
     private Connection conexion;
 
-    public ReadXml(Part filePart) {
+    public ReadXml(Part filePart, ArrayList<Part> filePdfs) {
         this.filePart = filePart;
+        this.filePdfs = filePdfs;
     }
 
     public void readData() {
@@ -45,12 +49,12 @@ public class ReadXml {
      */
     private void getWorkDays() {
         List<WorkDay> days = new ArrayList<>();
-        days.add(new WorkDay(1, "MATUTINO", getTime("06:00:00"),getTime("14:30:00")));
+        days.add(new WorkDay(1, "MATUTINO", getTime("06:00:00"), getTime("14:30:00")));
         days.add(new WorkDay(2, "VESPERTINO", getTime("13:00:00"), getTime("22:00:00")));
         days.add(new WorkDay(3, "24 HORAS", getTime("00:00:00"), getTime("23:59:59")));
-        
+
         ManagerDao mDao = new ManagerDao(conexion);
-        for(WorkDay w : days){
+        for (WorkDay w : days) {
             mDao.insertWorkday(w);
             System.out.println(w.toString());
         }
@@ -79,7 +83,7 @@ public class ReadXml {
     private void getCashiers() {
         List<Cashier> cashiers = new ArrayList<>();
         List<Element> listC = getData("CAJERO");
-        
+
         //Agregar banca virtual
         Cashier tmp = new Cashier(101, "24 HORAS", "Banca Virtual", "101", "8cX7%%tedj4!yJm4");
         tmp.setAddress("Banco El Billeton");
@@ -88,7 +92,7 @@ public class ReadXml {
         for (Element e : listC) {
             cashiers.add(new Cashier(e));
         }
-        
+
         CashierDao cDao = new CashierDao(conexion);
         for (Cashier c : cashiers) {
             cDao.insertCashier(c, false);
@@ -103,7 +107,14 @@ public class ReadXml {
         List<Client> clients = new ArrayList<>();
         List<Element> listC = getData("CLIENTE");
         for (Element e : listC) {
-            clients.add(new Client(e));
+            Client tmp = new Client(e);
+            Part pdf = getPdfDpi(tmp.getStrPdfDpi());
+            try {
+                tmp.setPdfDpi(pdf.getInputStream());
+            } catch (IOException ex) {
+                ex.printStackTrace(System.out);
+            }
+            clients.add(tmp);
         }
 
         ClientDao cDao = new ClientDao(conexion);
@@ -137,8 +148,9 @@ public class ReadXml {
 
     /**
      * Metodo para leer archivo xml
+     *
      * @param node
-     * @return 
+     * @return
      */
     private List<Element> getData(String node) {
         List<Element> elements = new ArrayList<>();
@@ -157,9 +169,28 @@ public class ReadXml {
     }
 
     /**
-     * Metodo para obtener fecha de un string
+     * Metodo para obtener dpi-pdf de cada cliente
+     *
      * @param source
-     * @return 
+     * @return
+     */
+    public Part getPdfDpi(String source) {
+        Part pdf = null;
+        for (Part p : filePdfs) {
+            if (source.equals(p.getSubmittedFileName())) {
+                System.out.println(p.getSubmittedFileName());
+                pdf = p;
+                break;
+            }
+        }
+        return pdf;
+    }
+
+    /**
+     * Metodo para obtener fecha de un string
+     *
+     * @param source
+     * @return
      */
     public static java.sql.Date getDate(String source) {
         java.sql.Date date = null;
@@ -175,8 +206,9 @@ public class ReadXml {
 
     /**
      * Metodo para obtener tiempo de un string
+     *
      * @param source
-     * @return 
+     * @return
      */
     public static java.sql.Time getTime(String source) {
         java.sql.Time time = null;

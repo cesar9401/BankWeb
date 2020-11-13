@@ -17,7 +17,7 @@
                 <div class="jumbotron py-4">
                     <div class="container text-center">
                         <h1 class="display-4 text-danger">Banco "El Billeton"</h1>
-                        <h1><span class="font-weight-bold">Cajero</span> ${cashier.name}</h1>
+                        <h1><span class="font-weight-bold">Cajero:</span> ${cashier.name}</h1>
                     <p class="lead">Jornada: <span class="badge badge-info">${cashier.workDayName}</span></p>
                     <p class="lead">Horario: <span class="badge badge-light">${cashier.startTime}</span> - <span class="badge badge-light">${cashier.endTime}</span></p>
                 </div>

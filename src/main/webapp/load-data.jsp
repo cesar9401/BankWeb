@@ -23,7 +23,14 @@
                         <form id="form-load" action="ManagerController" method="post" enctype="multipart/form-data">
                             <div class="row py-2">
                                 <div class="col-12 col-lg-2 offset-lg-5 text-center">
-                                    <input type="file" name="data" accept=".xml" required>
+                                    <label for="data">Archivo XML</label>
+                                    <input type="file" name="data" id="data" accept=".xml" required>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-12 col-lg-2 offset-lg-5 text-center">
+                                    <label for="data-pdf">Archivos PDF</label>
+                                    <input type="file" name="data-pdf" id="data-pdf" accept=".pdf" multiple required>
                                 </div>
                             </div>
                             <div class="row py-2">

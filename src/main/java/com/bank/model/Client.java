@@ -22,6 +22,7 @@ public class Client extends Person {
 
     private int clientId;
     private java.sql.Date birth;
+    private String strPdfDpi;
     private InputStream pdfDpi;
     private List<Account> accounts;
 
@@ -32,7 +33,8 @@ public class Client extends Person {
         super(e);
         this.clientId = Integer.parseInt(e.getChildText("CODIGO"));
         this.birth = ReadXml.getDate(e.getChildText("BIRTH"));
-
+        this.strPdfDpi = e.getChildText("DPI-PDF");
+        
         Element el = e.getChild("CUENTAS");
         List<Element> elChild = el.getChildren("CUENTA");
         accounts = new ArrayList<>();
@@ -81,6 +83,14 @@ public class Client extends Person {
         this.birth = birth;
     }
 
+    public String getStrPdfDpi() {
+        return strPdfDpi;
+    }
+
+    public void setStrPdfDpi(String strPdfDpi) {
+        this.strPdfDpi = strPdfDpi;
+    }
+    
     public InputStream getPdfDpi() {
         return pdfDpi;
     }

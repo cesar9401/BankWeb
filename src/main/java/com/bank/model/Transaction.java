@@ -28,12 +28,12 @@ public class Transaction {
 
     public Transaction(Element e) {
         this.transactionId = Integer.parseInt(e.getChildText("CODIGO"));
-        this.accountId = Integer.parseInt(e.getChildText("CUENTA"));
+        this.accountId = Integer.parseInt(e.getChildText("CUENTA-ID"));
         this.createdOn = ReadXml.getDate(e.getChildText("FECHA"));
         this.createdAt = ReadXml.getTime(e.getChildText("HORA"));
         this.type = e.getChildText("TIPO");
         this.amount = Double.parseDouble(e.getChildText("MONTO"));
-        this.cashierId = Integer.parseInt(e.getChildText("CAJERO"));
+        this.cashierId = Integer.parseInt(e.getChildText("CAJERO-ID"));
     }
 
     public Transaction(HttpServletRequest request) {

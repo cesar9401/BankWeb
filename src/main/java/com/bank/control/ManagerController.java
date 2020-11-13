@@ -184,12 +184,7 @@ public class ManagerController extends HttpServlet {
         switch (action) {
             case "data":
                 //Cargar datos a la base de datos
-                System.out.println(action);
-                Part filePart = request.getPart("data");
-                ReadXml read = new ReadXml(filePart);
-                read.setConexion(conexion);
-                read.readData();
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                loadData(request, response);
                 break;
 
             case "signIn":
@@ -220,6 +215,23 @@ public class ManagerController extends HttpServlet {
                 insertAccount(request, response);
                 break;
         }
+    }
+
+    /**
+     * Metodo para cargar datos a DB
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     */
+    private void loadData(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Part filePart = request.getPart("data");
+        ArrayList<Part> filePdfs = (ArrayList<Part>) request.getParts();
+        ReadXml read = new ReadXml(filePart, filePdfs);
+        read.setConexion(conexion);
+        read.readData();
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     /**
