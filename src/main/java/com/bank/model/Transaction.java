@@ -2,6 +2,8 @@ package com.bank.model;
 
 import com.bank.control.ReadXml;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import javax.servlet.http.HttpServletRequest;
 import org.jdom2.Element;
@@ -15,7 +17,7 @@ public class Transaction {
     private int transactionId;
     private int accountId;
     private java.sql.Date createdOn;
-    private java.sql.Time createAt;
+    private java.sql.Time createdAt;
     private String type;
     private Double amount;
     private int cashierId;
@@ -28,7 +30,7 @@ public class Transaction {
         this.transactionId = Integer.parseInt(e.getChildText("CODIGO"));
         this.accountId = Integer.parseInt(e.getChildText("CUENTA"));
         this.createdOn = ReadXml.getDate(e.getChildText("FECHA"));
-        this.createAt = ReadXml.getTime(e.getChildText("HORA"));
+        this.createdAt = ReadXml.getTime(e.getChildText("HORA"));
         this.type = e.getChildText("TIPO");
         this.amount = Double.parseDouble(e.getChildText("MONTO"));
         this.cashierId = Integer.parseInt(e.getChildText("CAJERO"));
@@ -38,10 +40,23 @@ public class Transaction {
         this.transactionId = Integer.parseInt(request.getParameter("transactionId"));
         this.accountId = Integer.parseInt(request.getParameter("accountId"));
         this.createdOn = ReadXml.getDate(request.getParameter("created-on"));
-        this.createAt = ReadXml.getTime(request.getParameter("created-at"));
+        this.createdAt = ReadXml.getTime(request.getParameter("created-at"));
         this.type = request.getParameter("type");
         this.amount = Double.parseDouble(request.getParameter("amount"));
         this.cashierId = Integer.parseInt(request.getParameter("cashierId"));
+    }
+    
+    public Transaction(ResultSet rs) throws SQLException {
+        this.transactionId = rs.getInt("transaction_id");
+        this.accountId = rs.getInt("account_id");
+        this.createdOn = rs.getDate("created_on");
+        this.createdAt = rs.getTime("created_at");
+        this.type = rs.getString("type");
+        this.amount = rs.getDouble("amount");
+        this.cashierId = rs.getInt("cashier_id");
+        this.balance = rs.getDouble("balance");
+        this.clientName = rs.getString("client_name");
+        this.cashierName = rs.getString("cashier_name");
     }
 
     public int getTransactionId() {
@@ -68,12 +83,12 @@ public class Transaction {
         this.createdOn = createdOn;
     }
 
-    public Time getCreateAt() {
-        return createAt;
+    public Time getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(Time createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(Time createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getType() {
@@ -126,6 +141,6 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" + "transactionId=" + transactionId + ", accountId=" + accountId + ", createdOn=" + createdOn + ", createAt=" + createAt + ", type=" + type + ", amount=" + amount + ", cashierId=" + cashierId + ", balance=" + balance + '}';
+        return "Transaction{" + "transactionId=" + transactionId + ", accountId=" + accountId + ", createdOn=" + createdOn + ", createdAt=" + createdAt + ", type=" + type + ", amount=" + amount + ", cashierId=" + cashierId + ", balance=" + balance + '}';
     }
 }

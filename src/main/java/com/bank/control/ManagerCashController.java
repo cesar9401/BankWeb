@@ -3,6 +3,7 @@ package com.bank.control;
 import com.bank.conexion.Conexion;
 import com.bank.dao.AccountDao;
 import com.bank.dao.CashierDao;
+import com.bank.dao.TransactionDao;
 import com.bank.model.Account;
 import com.bank.model.Cashier;
 import com.bank.model.Transaction;
@@ -29,6 +30,7 @@ public class ManagerCashController extends HttpServlet {
     private final Connection conexion = Conexion.getConnection();
     private final CashierDao cashierDao = new CashierDao(conexion);
     private final AccountDao accountDao = new AccountDao(conexion);
+    private final TransactionDao transactionDao = new TransactionDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -94,6 +96,11 @@ public class ManagerCashController extends HttpServlet {
                 //Formulario para solicitar deposito
                 requestDeposit(request, response);
                 break;
+
+            case "requestCreditTransaction":
+                //Formulario para solicitar retiro
+                requestCreditTransaction(request, response);
+                break;
         }
     }
 
@@ -157,6 +164,16 @@ public class ManagerCashController extends HttpServlet {
     }
 
     /**
+     * Formulario para solicitar retiro
+     *
+     * @param request
+     * @param response
+     */
+    private void requestCreditTransaction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("withdrawal.jsp").forward(request, response);
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
@@ -192,6 +209,16 @@ public class ManagerCashController extends HttpServlet {
             case "newDeposit":
                 //Nuevo deposito
                 newDeposit(request, response);
+                break;
+
+            case "search-account-credit":
+                //Buscar cuenta para retirar
+                searchAccountCredit(request, response);
+                break;
+
+            case "newWithdrawal":
+                //Nuevo retiro
+                newWithdrawal(request, response);
                 break;
         }
     }
@@ -284,8 +311,56 @@ public class ManagerCashController extends HttpServlet {
      * @param request
      * @param response
      */
-    private void newDeposit(HttpServletRequest request, HttpServletResponse response) {
+    private void newDeposit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Transaction transaction = new Transaction(request);
+        //Transaccion a la base de datos
+        int transactionId = transactionDao.createTransaction(transaction);
+        transaction = transactionDao.getTransaction(transactionId);
+        //Atributos para confirmar deposito
+        request.setAttribute("deposit", transaction);
+        requestDeposit(request, response);
+    }
+
+    /**
+     * Buscar cuenta para retirar
+     *
+     * @param request
+     * @param response
+     */
+    private void searchAccountCredit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int accountId = Integer.parseInt(request.getParameter("account"));
+        //Cuenta de la base de datos
+        Account account = accountDao.getAccount(accountId);
+
+        if (account != null) {
+            request.setAttribute("accountCredit", account);
+        } else {
+            request.setAttribute("noAccount", accountId);
+        }
+        requestCreditTransaction(request, response);
+    }
+
+    /**
+     * Nuevo retiro
+     *
+     * @param request
+     * @param response
+     */
+    private void newWithdrawal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Transaction transaction = new Transaction(request);
+        int accountId = transaction.getAccountId();
         System.out.println(transaction.toString());
+        //Transaccion a la base de datos
+        int transactionId = transactionDao.createTransaction(transaction);
+        transaction = transactionDao.getTransaction(transactionId);
+        if (transaction != null) {
+            //Cuenta no nula
+            request.setAttribute("withdrawal", transaction);
+        } else {
+            //Cuenta nula
+            Account account = accountDao.getAccount(accountId);
+            request.setAttribute("account", account);
+        }
+        requestCreditTransaction(request, response);
     }
 }

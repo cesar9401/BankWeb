@@ -20,6 +20,7 @@ public class Account {
     //Datos cliente
     private String name;
     private int clientId;
+    private String dpi;
 
     //Datos para cuentas asociadas
     private int associatedId;
@@ -117,6 +118,14 @@ public class Account {
         this.tryNumber = tryNumber;
     }
 
+    public String getDpi() {
+        return dpi;
+    }
+
+    public void setDpi(String dpi) {
+        this.dpi = dpi;
+    }
+    
     @Override
     public String toString() {
         return "Account{" + "accountId=" + accountId + ", createdOn=" + createdOn + ", credit=" + credit + '}';

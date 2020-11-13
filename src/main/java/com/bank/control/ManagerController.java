@@ -259,6 +259,8 @@ public class ManagerController extends HttpServlet {
                 Client client = clientDao.getClient(code, password);
                 if (client != null) {
                     request.getSession().setAttribute("code", client.getClientId());
+                    request.setAttribute("client", client);
+                    request.getRequestDispatcher("clientView.jsp").forward(request, response);
                 } else {
                     setErrorLogin(request, response);
                 }

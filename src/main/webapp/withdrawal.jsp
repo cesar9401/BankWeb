@@ -8,7 +8,7 @@
         <%@include  file="resources/css.html" %>
         <link href="resources/style.css" rel="stylesheet">
         <link href="resources/img/banking.png" rel="icon" type="image/png">
-        <title>Deposito</title>
+        <title>Retiro</title>
     </head>
     <body>
         <jsp:include page="WEB-INF/navCashier.jsp"></jsp:include>
@@ -18,7 +18,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col text-center">
-                            <h1 id="title-for-account" class="text-danger display-4 my-2">Nuevo Deposito</h1>
+                            <h1 id="title-for-account" class="text-danger display-4 my-2">Nuevo Retiro</h1>
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@
                                         <input type="number" min="0" class="form-control text-center" id="account" name="account" required>
                                     </div>
                                     <div class="col-lg-2">
-                                        <button id="btn-search-account" class="btn btn-outline-danger btn-block" type="submit" name="action" value="search-account">Buscar</button>
+                                        <button id="btn-search-account" class="btn btn-outline-danger btn-block" type="submit" name="action" value="search-account-credit">Buscar</button>
                                     </div>
                                 </div>
                             </form>
@@ -40,8 +40,8 @@
                 </div>
             </section>
 
-            <!--Formulario para hacer deposito-->
-            <section id="form-data-deposit" hidden>
+            <!--Formulario para hacer retiro-->
+            <section id="form-data-credit" hidden>
                 <div class="container">
                     <hr>
                     <hr>
@@ -64,6 +64,16 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="account-client-dpi">DPI</label>
+                                        <input type="number" min="0" class="form-control" id="account-client-dpi" name="account-client-dpi" readonly required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="dpi-pdf">Verificar DPI</label>
+                                        <a href="#" id="client-dpi-pdf" target="_blank" class="btn btn-outline-danger btn-block">Verificar DPI</a>
+                                    </div>
+                                </div>
+                                <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="account-id">Fecha</label>
                                         <input type="date" class="form-control" id="created-on" name="created-on" required>
@@ -76,13 +86,21 @@
                                         <label for="name">Monto Q.</label>
                                         <input type="number" min="0" step="any" class="form-control text-right" id="amount" name="amount" placeholder="Q. 0.00" required>
                                         <input type="hidden" value="${code}" name="cashierId">
-                                    <input type="hidden" value="DEBITO" name="type">
+                                    <input type="hidden" value="CREDITO" name="type">
                                     <input type="hidden" value="0" name="transactionId">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+                                    <label class="form-check-label" for="invalidCheck2">
+                                        Confirmo que he revisado la indentidad del cliente
+                                    </label>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-2 offset-md-5">
-                                    <button type="submit" class="btn btn-danger btn-block" name="action" value="newDeposit">Depositar</button>
+                                    <button type="submit" class="btn btn-danger btn-block" name="action" value="newWithdrawal">Retirar</button>
                                 </div>
                             </div>
                         </form>
@@ -91,20 +109,20 @@
             </div>
         </section>
 
-        <!--Informacion deposito-->
-        <section id="deposit" hidden>
+        <!--Informacion retiro-->
+        <section id="withdrawal" hidden>
             <div class="container">
                 <hr>
                 <div class="row">
                     <div class="col">
                         <div class="card p-4">
                             <div class="card-header text-center">
-                                <h2 id="title-new-client" class="text-danger">Deposito</h2>
+                                <h2 id="title-new-client" class="text-danger">Retiro</h2>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col col-md-3 text-right">
-                                        <p class="card-title font-weight-bold my-1">Deposito</p>
+                                        <p class="card-title font-weight-bold my-1">Retiro</p>
                                     </div>
                                     <div class="col col-md-9">
                                         <p class="card-title my-1" id="transaction-id"></p>
@@ -173,8 +191,74 @@
             </div>
         </section>
 
+        <!--Informacion cuenta-->
+        <section id="account-no-withdrawal" hidden>
+            <div class="container">
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-4">
+                            <div class="card-header text-center">
+                                <h2 id="title-new-client" class="text-danger">Informacion de la Cuenta</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col col-md-3 text-right">
+                                        <p class="card-title font-weight-bold my-1">Propietario</p>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <p class="card-title my-1" id="account-client-name"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-md-3 text-right">
+                                        <p class="card-title font-weight-bold my-1">DPI</p>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <p class="card-title my-1" id="account-dpi"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-md-3 text-right">
+                                        <p class="card-title font-weight-bold my-1">Cuenta</p>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <p class="card-title my-1" id="account-account-id"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-md-3 text-right">
+                                        <p class="card-title font-weight-bold my-1">Credito</p>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <p class="card-title my-1" id="account-account-credit"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-md-3 text-right">
+                                        <p class="card-title font-weight-bold my-1">Creada desde</p>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <p class="card-title my-1" id="account-created-on"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-md-3 text-right">
+                                        <p class="card-title font-weight-bold my-1">Verificar DPI</p>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <a href="#" id="account-dpi-pdf" target="_blank" class="btn btn-link">Verificar DPI</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Modal informacion-->
-        <div class="modal fade" id="modal-deposit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modal-withdrawal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -198,26 +282,40 @@
             <c:choose>
                 <c:when test="${noAccount != null}">
             $('#info').text("No se ha encontrado la cuenta:  ${noAccount}");
-            $('#modal-deposit').modal('show');
+            $('#modal-withdrawal').modal('show');
+                </c:when>
+                <c:when test="${accountCredit != null}">
+            $('#account').val("${accountCredit.accountId}");
+            $('#form-data-credit').prop("hidden", false);
+            $('#account-id').val("${accountCredit.accountId}");
+            $('#name').val("${accountCredit.name}");
+            $('#account-client-dpi').val("${accountCredit.dpi}");
+            $('#client-dpi-pdf').prop("href", "ManagerController?action=getDPI&clientId=${accountCredit.clientId}");
+                </c:when>
+                <c:when test="${withdrawal != null}">
+            $('#info').text("Se ha realizado correctamente la transaccion desde la cuenta: ${withdrawal.accountId}");
+            $('#modal-withdrawal').modal('show');
+            $('#withdrawal').prop("hidden", false);
+            $('#transaction-id').text("${withdrawal.transactionId}");
+            $('#account-id-deposit').text("${withdrawal.accountId}");
+            $('#client-name').text("${withdrawal.clientName}");
+            $('#amount-deposit').text("Q. ${withdrawal.amount}");
+            $('#created-on-deposit').text("${withdrawal.createdOn}");
+            $('#created-at-deposit').text("${withdrawal.createdAt}");
+            $('#cashier-id').text("${withdrawal.cashierId}");
+            $('#cashier-name').text("${withdrawal.cashierName}");
                 </c:when>
                 <c:when test="${account != null}">
             $('#account').val("${account.accountId}");
-            $('#form-data-deposit').prop("hidden", false);
-            $('#account-id').val("${account.accountId}");
-            $('#name').val("${account.name}");
-                </c:when>
-                <c:when test="${deposit != null}">
-            $('#info').text("Se ha realizado correctamente el deposito a la cuenta: ${deposit.accountId}");
-            $('#modal-deposit').modal('show');
-            $('#deposit').prop("hidden", false);
-            $('#transaction-id').text("${deposit.transactionId}");
-            $('#account-id-deposit').text("${deposit.accountId}");
-            $('#client-name').text("${deposit.clientName}");
-            $('#amount-deposit').text("Q. ${deposit.amount}");
-            $('#created-on-deposit').text("${deposit.createdOn}");
-            $('#created-at-deposit').text("${deposit.createdAt}");
-            $('#cashier-id').text("${deposit.cashierId}");
-            $('#cashier-name').text("${deposit.cashierName}");
+            $('#account-no-withdrawal').prop("hidden", false);
+            $('#info').text("No se puede completar la transaccion desde la cuenta: ${account.accountId}");
+            $('#modal-withdrawal').modal('show');
+            $('#account-client-name').text("${account.name}");
+            $('#account-dpi').text("${account.dpi}");
+            $('#account-account-id').text("${account.accountId}");
+            $('#account-account-credit').text("Q. ${account.credit}");
+            $('#account-created-on').text("${account.createdOn}");
+            $('#account-dpi-pdf').prop("href", "ManagerController?action=getDPI&clientId=${account.clientId}");
                 </c:when>
             </c:choose>
         </script>

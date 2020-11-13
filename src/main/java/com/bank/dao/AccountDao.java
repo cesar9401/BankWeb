@@ -92,13 +92,14 @@ public class AccountDao {
      */
     public Account getAccount(int accountId) {
         Account account = null;
-        String query = "SELECT a.*, name FROM ACCOUNTS a INNER JOIN CLIENTS c ON a.client_id = c.client_id WHERE account_id = ?";
+        String query = "SELECT a.*, name, dpi FROM ACCOUNTS a INNER JOIN CLIENTS c ON a.client_id = c.client_id WHERE account_id = ?";
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
             ps.setInt(1, accountId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     account = new Account(rs);
                     account.setName(rs.getString("name"));
+                    account.setDpi(rs.getString("dpi"));
                 }
             }
         } catch (SQLException ex) {
