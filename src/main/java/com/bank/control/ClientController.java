@@ -1,11 +1,16 @@
 package com.bank.control;
 
 import com.bank.conexion.Conexion;
+import com.bank.dao.AccountDao;
+import com.bank.dao.AssociatedAccountDao;
 import com.bank.dao.ClientDao;
+import com.bank.model.Account;
+import com.bank.model.AssociatedAccount;
 import com.bank.model.Client;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,9 +23,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ClientController", urlPatterns = {"/ClientController"})
 public class ClientController extends HttpServlet {
-
+    
     private final Connection conexion = Conexion.getConnection();
     private final ClientDao clientDao = new ClientDao(conexion);
+    private final AccountDao accountDao = new AccountDao(conexion);
+    private final AssociatedAccountDao associatedDao = new AssociatedAccountDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,6 +73,21 @@ public class ClientController extends HttpServlet {
                 //Perfil del cliente
                 setProfileClient(request, response);
                 break;
+            
+            case "requestAssociation":
+                //Iniciar proceso de solicitar asociacion de cuenta
+                requestAssociation(request, response);
+                break;
+            
+            case "respondToRequests":
+                //Ver y responder solicitudes
+                respondToRequests(request, response);
+                break;
+            
+            case "answerRequest":
+                //Responder solicitud de asociacion
+                answerRequest(request, response);
+                break;
         }
     }
 
@@ -78,8 +100,50 @@ public class ClientController extends HttpServlet {
     private void setProfileClient(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int clientId = (int) request.getSession().getAttribute("code");
         Client client = clientDao.getClient(clientId, "");
+        List<Account> accounts = accountDao.getAccounts(clientId);
+        client.setAccounts(accounts);
+        List<AssociatedAccount> requests = associatedDao.getRequestForAssociations(client.getClientId());
         request.setAttribute("client", client);
+        request.setAttribute("requests", requests);
         request.getRequestDispatcher("clientView.jsp").forward(request, response);
+    }
+
+    /**
+     * Iniciar proceso de asociacion de cuenta
+     *
+     * @param request
+     * @param response
+     */
+    private void requestAssociation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("association.jsp").forward(request, response);
+    }
+
+    /**
+     * Metodo para ver solicitudes de asociacion
+     *
+     * @param request
+     * @param response
+     */
+    private void respondToRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clientId = (int) request.getSession().getAttribute("code");
+        List<AssociatedAccount> requests = associatedDao.getRequestForAssociations(clientId);
+        request.setAttribute("requests", requests);
+        request.getRequestDispatcher("requests.jsp").forward(request, response);
+    }
+
+    /**
+     * Reponder solicitud de asocacion
+     *
+     * @param request
+     * @param response
+     */
+    private void answerRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String answer = request.getParameter("answer");
+        System.out.println("answer = " + answer);
+        int associatedId = Integer.parseInt(request.getParameter("associatedId"));
+        System.out.println("associatedId = " + associatedId);
+        
+        respondToRequests(request, response);
     }
 
     /**
@@ -93,7 +157,79 @@ public class ClientController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        switch (action) {
+            case "search-account":
+                //Buscar cuenta para asociacion
+                searchAccount(request, response);
+                break;
+            
+            case "newAssociaction":
+                //Asociacion de cuenta
+                newAssociaction(request, response);
+                break;
+        }
     }
 
+    /**
+     * Metodo para buscar cuenta para asociar
+     *
+     * @param request
+     * @param response
+     */
+    private void searchAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int accountId = Integer.parseInt(request.getParameter("account"));
+        int clientId = (int) request.getSession().getAttribute("code");
+        
+        AssociatedAccount asso = associatedDao.getAssociated(null, clientId, accountId);
+        if (asso != null) {
+            if (asso.getStatus().equals("ACEPTADA")) {
+                //Ya fue aceptada
+                request.setAttribute("accepted", asso);
+            } else if (asso.getTryNumber() == 3) {
+                //Sobrepaso numero de intentos
+                request.setAttribute("noAttempts", asso);
+            } else {
+                //En estado de espera
+                request.setAttribute("waiting", asso);
+            }
+        } else {
+            //No existe asociacion
+            //Cuenta de la base de datos
+            Account account = accountDao.getAccount(accountId);
+            if (account != null) {
+                if (clientId != account.getClientId()) {
+                    Client client = clientDao.getClient(clientId, "");
+                    request.setAttribute("client", client);
+                    request.setAttribute("account", account);
+                } else {
+                    //Cuenta propia
+                    request.setAttribute("notAllowed", account);
+                }
+            } else {
+                //No existe cuenta
+                request.setAttribute("noAccount", accountId);
+            }
+        }
+        
+        requestAssociation(request, response);
+    }
+
+    /**
+     * Metodo para solicitar asociacion de cuenta
+     *
+     * @param request
+     * @param response
+     */
+    private void newAssociaction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Obtener de formulario
+        AssociatedAccount associated = new AssociatedAccount(request);
+        int associatedId = associatedDao.insertAssociatedAccount(associated);
+        //Obtener de base de datos
+        associated = associatedDao.getAssociated(associatedId, null, null);
+        System.out.println(associated.toString());
+        //Setear atributos
+        request.setAttribute("associated", associated);
+        requestAssociation(request, response);
+    }
 }

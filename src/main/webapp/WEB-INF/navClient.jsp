@@ -7,10 +7,13 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Enlace 1</a>
+                    <a href="ClientController?action=respondToRequests" class="nav-link">Solicitudes <span class="badge badge-light">${requests.size()}</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Enlace 2</a>
+                    <a class="nav-link" href="#">Transacciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ClientController?action=requestAssociation">Solicitar Asociaci&oacute;n</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

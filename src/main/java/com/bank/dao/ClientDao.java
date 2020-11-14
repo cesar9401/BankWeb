@@ -79,7 +79,7 @@ public class ClientDao {
      * @return
      */
     public int createClientAndAccount(Client c) {
-        int clientId = 0;
+        int clientId =       0;
         try {
             this.conexion.setAutoCommit(false);
             clientId = insertClient(c);

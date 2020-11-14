@@ -30,6 +30,7 @@ public class ManagerController extends HttpServlet {
     private final ClientDao clientDao = new ClientDao(conexion);
     private final CashierDao cashierDao = new CashierDao(conexion);
     private final AccountDao accountDao = new AccountDao(conexion);
+    private final AssociatedAccountDao associatedDao = new AssociatedAccountDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -270,8 +271,12 @@ public class ManagerController extends HttpServlet {
             case "client":
                 Client client = clientDao.getClient(code, password);
                 if (client != null) {
+                    List<Account> accounts = accountDao.getAccounts(client.getClientId());
+                    client.setAccounts(accounts);
+                    List<AssociatedAccount> requests = associatedDao.getRequestForAssociations(client.getClientId());
                     request.getSession().setAttribute("code", client.getClientId());
                     request.setAttribute("client", client);
+                    request.setAttribute("requests", requests);
                     request.getRequestDispatcher("clientView.jsp").forward(request, response);
                 } else {
                     setErrorLogin(request, response);

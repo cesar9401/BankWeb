@@ -44,7 +44,6 @@
             <section id="form-data-deposit" hidden>
                 <div class="container">
                     <hr>
-                    <hr>
                     <div class="row">
                         <div class="col text-center">
                             <h4 class="font-weight-bold text-danger">Datos Deposito</h4>
