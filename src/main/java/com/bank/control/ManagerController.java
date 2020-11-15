@@ -31,6 +31,7 @@ public class ManagerController extends HttpServlet {
     private final CashierDao cashierDao = new CashierDao(conexion);
     private final AccountDao accountDao = new AccountDao(conexion);
     private final AssociatedAccountDao associatedDao = new AssociatedAccountDao(conexion);
+    private final HistoryController history = new HistoryController(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -318,11 +319,15 @@ public class ManagerController extends HttpServlet {
      * @throws IOException
      */
     private void updateDataManager(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int managerId = (int) request.getSession().getAttribute("code");
         //Crear manager
         Manager manager = new Manager(request);
-        System.out.println(manager.toString());
+        //Manger en db
+        Manager oldManager = managerDao.getManager(manager.getManagerId(), "");
         //Actualizar en base de datos
         managerDao.updateManager(manager);
+        Manager newManager = managerDao.getManager(manager.getManagerId(), "");
+        history.historyManager(managerId, newManager, oldManager);
         request.setAttribute("update", true);
         //Perfil del gerente
         setProfileManager(request, response, manager.getManagerId());
@@ -384,12 +389,15 @@ public class ManagerController extends HttpServlet {
      * @param response
      */
     private void updateClient(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ServletException, IOException {
+        int managerId = (int) request.getSession().getAttribute("code");
         Client client = new Client(request, false);
-        System.out.println(client.toString());
+        Client clientOld = clientDao.getClient(client.getClientId(), "");
         //Actualizar en la base de datos
         clientDao.updateClient(client);
         //Obtener de DB
         client = clientDao.getClient(client.getClientId(), "");
+        //Cambios en cliente
+        history.historyClient(managerId, client, clientOld);
         //Enviar atributo
         request.setAttribute("updateClient", client);
         //Redigir a la vista de buscar clientes

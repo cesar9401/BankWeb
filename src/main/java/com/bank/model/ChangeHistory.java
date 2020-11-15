@@ -10,9 +10,9 @@ import java.sql.Timestamp;
 public class ChangeHistory {
     private int changeId;
     private int managerMainId;
-    private int clientId;
-    private int chashierId;
-    private int managerId;
+    private Integer clientId;
+    private Integer chashierId;
+    private Integer managerId;
     private String description;
     private java.sql.Timestamp createdAt;
     
@@ -21,6 +21,15 @@ public class ChangeHistory {
     private String clientName;
     private String cashierName;
     private String managerName;
+
+    public ChangeHistory(int changeId, int managerMainId, Integer clientId, Integer chashierId, Integer managerId, String description) {
+        this.changeId = changeId;
+        this.managerMainId = managerMainId;
+        this.clientId = clientId;
+        this.chashierId = chashierId;
+        this.managerId = managerId;
+        this.description = description;
+    }
 
     public int getChangeId() {
         return changeId;
@@ -38,27 +47,27 @@ public class ChangeHistory {
         this.managerMainId = managerMainId;
     }
 
-    public int getClientId() {
+    public Integer getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(Integer clientId) {
         this.clientId = clientId;
     }
 
-    public int getChashierId() {
+    public Integer getChashierId() {
         return chashierId;
     }
 
-    public void setChashierId(int chashierId) {
+    public void setChashierId(Integer chashierId) {
         this.chashierId = chashierId;
     }
 
-    public int getManagerId() {
+    public Integer getManagerId() {
         return managerId;
     }
 
-    public void setManagerId(int managerId) {
+    public void setManagerId(Integer managerId) {
         this.managerId = managerId;
     }
 

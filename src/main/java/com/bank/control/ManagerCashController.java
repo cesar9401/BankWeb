@@ -31,6 +31,7 @@ public class ManagerCashController extends HttpServlet {
     private final CashierDao cashierDao = new CashierDao(conexion);
     private final AccountDao accountDao = new AccountDao(conexion);
     private final TransactionDao transactionDao = new TransactionDao(conexion);
+    private final HistoryController history = new HistoryController(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -274,12 +275,14 @@ public class ManagerCashController extends HttpServlet {
      * @param response
      */
     private void updateCashier(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ServletException, IOException {
+        int managerId = (int) request.getSession().getAttribute("code");
         Cashier cashier = new Cashier(request);
-        System.out.println(cashier.toString());
+        Cashier oldCashier = cashierDao.getCashier(cashier.getCashierId(), "");
         //Actualizar
         cashierDao.updateCashier(cashier);
         //Obtener de la base de datos
         cashier = cashierDao.getCashier(cashier.getCashierId(), "");
+        history.historyCashier(managerId, cashier, oldCashier);
         request.setAttribute("updateCashier", cashier);
         //Redirigir a la vista de busqueda
         searchCashiers(request, response);
