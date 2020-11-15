@@ -271,7 +271,7 @@ public class ManagerController extends HttpServlet {
             case "client":
                 Client client = clientDao.getClient(code, password);
                 if (client != null) {
-                    List<Account> accounts = accountDao.getAccounts(client.getClientId());
+                    List<Account> accounts = accountDao.getAccounts(client.getClientId(), false);
                     client.setAccounts(accounts);
                     List<AssociatedAccount> requests = associatedDao.getRequestForAssociations(client.getClientId());
                     request.getSession().setAttribute("code", client.getClientId());
@@ -364,7 +364,7 @@ public class ManagerController extends HttpServlet {
         //Obtener cliente y cuentas de DB
         client = clientDao.getClient(clientId, "");
         System.out.println(client.toString());
-        client.setAccounts(accountDao.getAccounts(clientId));
+        client.setAccounts(accountDao.getAccounts(clientId, false));
 
         //setear atributo
         request.setAttribute("newClient", client);

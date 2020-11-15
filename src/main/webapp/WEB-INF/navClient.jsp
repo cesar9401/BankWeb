@@ -10,7 +10,7 @@
                     <a href="ClientController?action=respondToRequests" class="nav-link">Solicitudes <span class="badge badge-light">${requests.size()}</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Transacciones</a>
+                    <a class="nav-link" href="ClientController?action=transferRequest">Transacciones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="ClientController?action=requestAssociation">Solicitar Asociaci&oacute;n</a>

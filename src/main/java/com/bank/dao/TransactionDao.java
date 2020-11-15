@@ -46,8 +46,9 @@ public class TransactionDao {
      *
      * @param t
      * @return
+     * @throws java.sql.SQLException
      */
-    public int createTransaction(Transaction t) {
+    public int createTransaction(Transaction t) throws SQLException {
         int transactionId = 0;
         double credit = 0;
         double amount = t.getType().equals("CREDITO") ? (t.getAmount() * -1) : t.getAmount();
@@ -58,7 +59,7 @@ public class TransactionDao {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            this.conexion.setAutoCommit(false);
+            //this.conexion.setAutoCommit(false);
             ps = this.conexion.prepareStatement(queryCredit);
             ps.setInt(1, t.getAccountId());
             rs = ps.executeQuery();
@@ -90,21 +91,69 @@ public class TransactionDao {
                     transactionId = rs.getInt(1);
                 }
             }
-            this.conexion.commit();
-            this.conexion.setAutoCommit(true);
-        } catch (SQLException ex) {
-            try {
-                this.conexion.rollback();
-            } catch (SQLException ex1) {
-                ex1.printStackTrace(System.out);
-            }
-            ex.printStackTrace(System.out);
+            //this.conexion.commit();
+            //this.conexion.setAutoCommit(true);
         } finally {
             Conexion.close(rs);
             Conexion.close(ps);
         }
 
         return transactionId;
+    }
+
+    /**
+     * Crear transaccion atrapando cualquier exception
+     *
+     * @param t
+     * @return
+     */
+    public int createTransactionEx(Transaction t) {
+        int transactionId = 0;
+
+        try {
+            this.conexion.setAutoCommit(false);
+            transactionId = createTransaction(t);
+            this.conexion.commit();
+            this.conexion.setAutoCommit(true);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+            try {
+                this.conexion.rollback();
+            } catch (SQLException ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+        return transactionId;
+    }
+
+    /**
+     * Metodo para transaccion web
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public int[] createTransactionWeb(Transaction t1, Transaction t2) {
+        int[] ids = {0, 0};
+
+        try {
+            this.conexion.setAutoCommit(false);
+            ids[0] = createTransaction(t1);
+            if (ids[0] != 0) {
+                ids[1] = createTransaction(t2);
+            }
+            this.conexion.commit();
+            this.conexion.setAutoCommit(true);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+            try {
+                this.conexion.rollback();
+            } catch (SQLException ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+
+        return ids;
     }
 
     /**

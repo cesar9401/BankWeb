@@ -314,7 +314,7 @@ public class ManagerCashController extends HttpServlet {
     private void newDeposit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Transaction transaction = new Transaction(request);
         //Transaccion a la base de datos
-        int transactionId = transactionDao.createTransaction(transaction);
+        int transactionId = transactionDao.createTransactionEx(transaction);
         transaction = transactionDao.getTransaction(transactionId);
         //Atributos para confirmar deposito
         request.setAttribute("deposit", transaction);
@@ -351,7 +351,7 @@ public class ManagerCashController extends HttpServlet {
         int accountId = transaction.getAccountId();
         System.out.println(transaction.toString());
         //Transaccion a la base de datos
-        int transactionId = transactionDao.createTransaction(transaction);
+        int transactionId = transactionDao.createTransactionEx(transaction);
         transaction = transactionDao.getTransaction(transactionId);
         if (transaction != null) {
             //Cuenta no nula

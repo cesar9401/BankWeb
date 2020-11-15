@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -100,5 +102,22 @@ public class AssociatedAccountDao {
             ex.printStackTrace(System.out);
         }
         return listAsso;
+    }
+
+    /**
+     * Metodo para responder a la solicitud de asociacion
+     *
+     * @param associatedId
+     * @param answer
+     */
+    public void insertAnswer(int associatedId, String answer) {
+        String query = "UPDATE ASSOCIATED_ACCOUNTS SET status = ? WHERE associated_id = ?";
+        try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
+            ps.setString(1, answer);
+            ps.setInt(2, associatedId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 }

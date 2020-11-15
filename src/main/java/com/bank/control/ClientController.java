@@ -1,15 +1,12 @@
 package com.bank.control;
 
 import com.bank.conexion.Conexion;
-import com.bank.dao.AccountDao;
-import com.bank.dao.AssociatedAccountDao;
-import com.bank.dao.ClientDao;
-import com.bank.model.Account;
-import com.bank.model.AssociatedAccount;
-import com.bank.model.Client;
+import com.bank.dao.*;
+import com.bank.model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,11 +20,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ClientController", urlPatterns = {"/ClientController"})
 public class ClientController extends HttpServlet {
-    
+
     private final Connection conexion = Conexion.getConnection();
     private final ClientDao clientDao = new ClientDao(conexion);
     private final AccountDao accountDao = new AccountDao(conexion);
     private final AssociatedAccountDao associatedDao = new AssociatedAccountDao(conexion);
+    private final TransactionDao transactionDao = new TransactionDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,20 +71,25 @@ public class ClientController extends HttpServlet {
                 //Perfil del cliente
                 setProfileClient(request, response);
                 break;
-            
+
             case "requestAssociation":
                 //Iniciar proceso de solicitar asociacion de cuenta
                 requestAssociation(request, response);
                 break;
-            
+
             case "respondToRequests":
                 //Ver y responder solicitudes
                 respondToRequests(request, response);
                 break;
-            
+
             case "answerRequest":
                 //Responder solicitud de asociacion
                 answerRequest(request, response);
+                break;
+
+            case "transferRequest":
+                //Formulario para solicitar transferencia
+                transferRequest(request, response);
                 break;
         }
     }
@@ -100,7 +103,7 @@ public class ClientController extends HttpServlet {
     private void setProfileClient(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int clientId = (int) request.getSession().getAttribute("code");
         Client client = clientDao.getClient(clientId, "");
-        List<Account> accounts = accountDao.getAccounts(clientId);
+        List<Account> accounts = accountDao.getAccounts(clientId, false);
         client.setAccounts(accounts);
         List<AssociatedAccount> requests = associatedDao.getRequestForAssociations(client.getClientId());
         request.setAttribute("client", client);
@@ -139,11 +142,29 @@ public class ClientController extends HttpServlet {
      */
     private void answerRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String answer = request.getParameter("answer");
-        System.out.println("answer = " + answer);
         int associatedId = Integer.parseInt(request.getParameter("associatedId"));
-        System.out.println("associatedId = " + associatedId);
-        
+        //Respuesta hacia la basse de datos
+        associatedDao.insertAnswer(associatedId, answer);
+        AssociatedAccount associated = associatedDao.getAssociated(associatedId, null, null);
+        if (associated.getStatus().equals("ACEPTADA")) {
+            request.setAttribute("associated", associated);
+        }
         respondToRequests(request, response);
+    }
+
+    /**
+     * Formulario para solicitar transferencia
+     *
+     * @param request
+     * @param response
+     */
+    private void transferRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clientId = (int) request.getSession().getAttribute("code");
+        List<Account> accounts = accountDao.getAccounts(clientId, false);
+        List<Account> destinations = accountDao.getAccounts(clientId, true);
+        request.setAttribute("accounts", accounts);
+        request.setAttribute("destinations", destinations);
+        request.getRequestDispatcher("transfer.jsp").forward(request, response);
     }
 
     /**
@@ -163,10 +184,15 @@ public class ClientController extends HttpServlet {
                 //Buscar cuenta para asociacion
                 searchAccount(request, response);
                 break;
-            
+
             case "newAssociaction":
                 //Asociacion de cuenta
                 newAssociaction(request, response);
+                break;
+
+            case "newTransaction":
+                //Nueva transaccion web
+                newTransaction(request, response);
                 break;
         }
     }
@@ -180,7 +206,7 @@ public class ClientController extends HttpServlet {
     private void searchAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int accountId = Integer.parseInt(request.getParameter("account"));
         int clientId = (int) request.getSession().getAttribute("code");
-        
+
         AssociatedAccount asso = associatedDao.getAssociated(null, clientId, accountId);
         if (asso != null) {
             if (asso.getStatus().equals("ACEPTADA")) {
@@ -211,7 +237,7 @@ public class ClientController extends HttpServlet {
                 request.setAttribute("noAccount", accountId);
             }
         }
-        
+
         requestAssociation(request, response);
     }
 
@@ -231,5 +257,50 @@ public class ClientController extends HttpServlet {
         //Setear atributos
         request.setAttribute("associated", associated);
         requestAssociation(request, response);
+    }
+
+    /**
+     * Nueva transaccion web
+     *
+     * @param request
+     * @param response
+     */
+    private void newTransaction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int accountOrigin = Integer.parseInt(request.getParameter("origin-account"));
+        int accountDestination = Integer.parseInt(request.getParameter("destination-account"));
+        Double amount = Double.parseDouble(request.getParameter("transfer-amount"));
+        java.sql.Date date = ReadXml.getDate(request.getParameter("transfer-date"));
+        java.sql.Time time = ReadXml.getTime(request.getParameter("transfer-time"));
+
+        Transaction t1 = new Transaction(0, accountOrigin, date, time, "CREDITO", amount, 101);
+        Transaction t2 = new Transaction(0, accountDestination, date, time, "DEBITO", amount, 101);
+        //Cuentas distintas
+        if (t1.getAccountId() != t2.getAccountId()) {
+
+            int[] ids = transactionDao.createTransactionWeb(t1, t2);
+            Transaction r1 = transactionDao.getTransaction(ids[0]);
+            Transaction r2 = transactionDao.getTransaction(ids[1]);
+
+            if (r1 != null) {
+                //Transacciones exitosas
+                List<Transaction> transactions = new ArrayList<>();
+                transactions.add(r1);
+                transactions.add(r2);
+                request.setAttribute("transactions", transactions);
+
+            } else {
+                //Transaccion no realizada por falta de dinero
+                //Account a = accountDao.getAccount(accountOrigin);
+                request.setAttribute("outOfMoney", true);
+                request.setAttribute("origin", t1);
+                request.setAttribute("destination", accountDestination);
+            }
+        } else {
+            //Mismas cuentas
+            request.setAttribute("sameAccounts", true);
+            request.setAttribute("origin", t1);
+        }
+        
+        transferRequest(request, response);
     }
 }

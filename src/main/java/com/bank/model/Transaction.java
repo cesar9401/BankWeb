@@ -59,6 +59,16 @@ public class Transaction {
         this.cashierName = rs.getString("cashier_name");
     }
 
+    public Transaction(int transactionId, int accountId, Date createdOn, Time createdAt, String type, Double amount, int cashierId) {
+        this.transactionId = transactionId;
+        this.accountId = accountId;
+        this.createdOn = createdOn;
+        this.createdAt = createdAt;
+        this.type = type;
+        this.amount = amount;
+        this.cashierId = cashierId;
+    }
+    
     public int getTransactionId() {
         return transactionId;
     }

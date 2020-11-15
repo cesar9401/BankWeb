@@ -84,7 +84,33 @@
             </div>
         </section>
 
+        <!-- Modal informacion-->
+        <div class="modal fade" id="modal-requests" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><span class="badge badge-info">Informaci&oacute;n</span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="info"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
 
         <%@include file="resources/js.html" %>
+        <c:if test="${associated != null}">
+            <script>
+                $('#info').text("Su cuenta ${associated.accountId} ha sido asociada al cliente ${associated.associatedName}, ahora él podrá hacer transacciones hacia su cuenta.");
+                $('#modal-requests').modal('show');
+            </script>      
+        </c:if>
     </body>
 </html>

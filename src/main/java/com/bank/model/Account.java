@@ -52,6 +52,8 @@ public class Account {
         this.clientId = rs.getInt("client_id");
         this.createdOn = rs.getDate("created_on");
         this.credit = rs.getDouble("credit");
+        this.name = rs.getString("name");
+        this.dpi = rs.getString("dpi");
     }
 
     public int getAccountId() {
