@@ -25,6 +25,11 @@ public class Transaction {
 
     private String cashierName;
     private String clientName;
+    private int clientId;
+    
+    //Para reporte 3
+    private String dpi;
+    private Double total;
 
     public Transaction(Element e) {
         this.transactionId = Integer.parseInt(e.getChildText("CODIGO"));
@@ -56,6 +61,7 @@ public class Transaction {
         this.cashierId = rs.getInt("cashier_id");
         this.balance = rs.getDouble("balance");
         this.clientName = rs.getString("client_name");
+        this.clientId = rs.getInt("client_id");
         this.cashierName = rs.getString("cashier_name");
     }
 
@@ -67,6 +73,15 @@ public class Transaction {
         this.type = type;
         this.amount = amount;
         this.cashierId = cashierId;
+    }
+
+    //Constructor reporte 3
+    public Transaction(String type, String clientName, int clientId, String dpi, Double total) {
+        this.type = type;
+        this.clientName = clientName;
+        this.clientId = clientId;
+        this.dpi = dpi;
+        this.total = total;
     }
     
     public int getTransactionId() {
@@ -149,6 +164,30 @@ public class Transaction {
         this.clientName = clientName;
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getDpi() {
+        return dpi;
+    }
+
+    public void setDpi(String dpi) {
+        this.dpi = dpi;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+    
     @Override
     public String toString() {
         return "Transaction{" + "transactionId=" + transactionId + ", accountId=" + accountId + ", createdOn=" + createdOn + ", createdAt=" + createdAt + ", type=" + type + ", amount=" + amount + ", cashierId=" + cashierId + ", balance=" + balance + '}';

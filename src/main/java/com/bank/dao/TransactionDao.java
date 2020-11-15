@@ -164,7 +164,7 @@ public class TransactionDao {
      */
     public Transaction getTransaction(int transactionId) {
         Transaction transaction = null;
-        String query = "SELECT t.*, c.name AS client_name, ca.name AS cashier_name FROM TRANSACTIONS t INNER JOIN ACCOUNTS a ON t.account_id = a.account_id "
+        String query = "SELECT t.*, c.name AS client_name, c.client_id, ca.name AS cashier_name FROM TRANSACTIONS t INNER JOIN ACCOUNTS a ON t.account_id = a.account_id "
                 + "INNER JOIN CLIENTS c ON a.client_id = c.client_id INNER JOIN CASHIERS ca ON t.cashier_id = ca.cashier_id "
                 + "WHERE t.transaction_id = ?";
 

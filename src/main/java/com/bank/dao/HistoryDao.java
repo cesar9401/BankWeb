@@ -26,7 +26,7 @@ public class HistoryDao {
         String query = "INSERT INTO CHANGE_HISTORY(change_id, manager_manager_id, ";
         if (h.getClientId() != null) {
             query += "client_id";
-        } else if (h.getChashierId() != null) {
+        } else if (h.getCashierId() != null) {
             query += "cashier_id";
         } else {
             query += "manager_id";
@@ -38,8 +38,8 @@ public class HistoryDao {
             ps.setInt(2, h.getManagerMainId());
             if (h.getClientId() != null) {
                 ps.setInt(3, h.getClientId());
-            } else if (h.getChashierId() != null) {
-                ps.setInt(3, h.getChashierId());
+            } else if (h.getCashierId()!= null) {
+                ps.setInt(3, h.getCashierId());
             } else {
                 ps.setInt(3, h.getManagerId());
             }

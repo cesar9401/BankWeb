@@ -1,6 +1,7 @@
-
 package com.bank.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
@@ -8,25 +9,37 @@ import java.sql.Timestamp;
  * @author cesar31
  */
 public class ChangeHistory {
+
     private int changeId;
     private int managerMainId;
     private Integer clientId;
-    private Integer chashierId;
+    private Integer cashierId;
     private Integer managerId;
     private String description;
     private java.sql.Timestamp createdAt;
-    
+
     //Datos extras
     private String managerMainName;
     private String clientName;
     private String cashierName;
     private String managerName;
 
-    public ChangeHistory(int changeId, int managerMainId, Integer clientId, Integer chashierId, Integer managerId, String description) {
+    public ChangeHistory(ResultSet rs) throws SQLException {
+        this.changeId = rs.getInt("change_id");
+        this.managerMainId = rs.getInt("manager_manager_id");
+        this.clientId = rs.getInt("client_id");
+        this.cashierId = rs.getInt("cashier_id");
+        this.managerId = rs.getInt("manager_id");
+        this.description = rs.getString("description");
+        this.createdAt = rs.getTimestamp("created_at");
+        this.managerMainName = rs.getString("manager_name");
+    }
+
+    public ChangeHistory(int changeId, int managerMainId, Integer clientId, Integer cashierId, Integer managerId, String description) {
         this.changeId = changeId;
         this.managerMainId = managerMainId;
         this.clientId = clientId;
-        this.chashierId = chashierId;
+        this.cashierId = cashierId;
         this.managerId = managerId;
         this.description = description;
     }
@@ -55,12 +68,12 @@ public class ChangeHistory {
         this.clientId = clientId;
     }
 
-    public Integer getChashierId() {
-        return chashierId;
+    public Integer getCashierId() {
+        return cashierId;
     }
 
-    public void setChashierId(Integer chashierId) {
-        this.chashierId = chashierId;
+    public void setCashierId(Integer cashierId) {
+        this.cashierId = cashierId;
     }
 
     public Integer getManagerId() {
