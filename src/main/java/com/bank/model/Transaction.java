@@ -30,6 +30,8 @@ public class Transaction {
     //Para reporte 3
     private String dpi;
     private Double total;
+    
+    private Double credit;
 
     public Transaction(Element e) {
         this.transactionId = Integer.parseInt(e.getChildText("CODIGO"));
@@ -186,6 +188,14 @@ public class Transaction {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public Double getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Double credit) {
+        this.credit = credit;
     }
     
     @Override

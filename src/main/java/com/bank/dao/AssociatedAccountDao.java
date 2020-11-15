@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -51,7 +49,7 @@ public class AssociatedAccountDao {
     }
 
     /**
-     * Obtener asocacion segun id, o cliente y cuetna
+     * Obtener asocacion segun id, o cliente y cuenta
      *
      * @param associatedId
      * @param clientId

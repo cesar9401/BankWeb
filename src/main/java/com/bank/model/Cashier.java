@@ -20,6 +20,8 @@ public class Cashier extends Person{
     private java.sql.Time startTime;
     private java.sql.Time endTime;
 
+    private int quantity;
+    
     public Cashier(Element e) {
         super(e);
         this.cashierId = Integer.parseInt(e.getChildText("CODIGO"));
@@ -85,6 +87,14 @@ public class Cashier extends Person{
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
     
     @Override
