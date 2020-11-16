@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -54,12 +52,18 @@ public class ReportDao {
                     ChangeHistory tmp = new ChangeHistory(rs);
                     switch (entity) {
                         case "MANAGERS":
+                            tmp.setChangedName(tmp.getManagerMainName());
+                            tmp.setChangedId(tmp.getManagerMainId());
                             break;
                         case "CASHIERS":
                             tmp.setCashierName(rs.getString("cashier_name"));
+                            tmp.setChangedName(tmp.getCashierName());
+                            tmp.setChangedId(tmp.getCashierId());
                             break;
                         case "CLIENTS":
                             tmp.setClientName(rs.getString("client_name"));
+                            tmp.setChangedName(tmp.getClientName());
+                            tmp.setChangedId(tmp.getClientId());
                             break;
                     }
                     history.add(tmp);
@@ -79,12 +83,12 @@ public class ReportDao {
      * @param limit
      * @return
      */
-    public List<Transaction> getTopTransactions(int limit) {
+    public List<Transaction> getTopTransactions(double limit) {
         List<Transaction> top = new ArrayList<>();
         String query = "SELECT t.*, c.name AS client_name, c.client_id, ca.name AS cashier_name FROM TRANSACTIONS t INNER JOIN ACCOUNTS a ON t.account_id = a.account_id INNER JOIN CLIENTS c ON a.client_id = c.client_id INNER JOIN CASHIERS ca ON t.cashier_id = ca.cashier_id "
                 + "WHERE t.amount > ?";
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
-            ps.setInt(1, limit);
+            ps.setDouble(1, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     top.add(new Transaction(rs));
@@ -103,12 +107,12 @@ public class ReportDao {
      * @param limit
      * @return
      */
-    public List<Transaction> getTopSummedTransactions(int limit) {
+    public List<Transaction> getTopSummedTransactions(double limit) {
         List<Transaction> top = new ArrayList<>();
         String query = "SELECT t.type, c.name AS client_name, c.client_id, c.dpi, SUM(t.amount) AS total FROM TRANSACTIONS t INNER JOIN ACCOUNTS a ON t.account_id = a.account_id INNER JOIN CLIENTS c ON a.client_id = c.client_id GROUP BY t.type, c.client_id "
                 + "HAVING total > ? ORDER BY total DESC";
         try (PreparedStatement ps = this.conexion.prepareStatement(query)) {
-            ps.setInt(1, limit);
+            ps.setDouble(1, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     top.add(new Transaction(rs.getString("type"), rs.getString("client_name"), rs.getInt("client_id"), rs.getString("dpi"), rs.getDouble("total")));
@@ -174,13 +178,13 @@ public class ReportDao {
      * @param lim2
      * @return
      */
-    public List<Transaction> TransactionHistoryByClients(Integer clientId, String name, Double lim1, Double lim2) {
+    public List<Transaction> transactionHistoryByClients(Integer clientId, String name, Double lim1, Double lim2) {
         List<Transaction> history = new ArrayList<>();
         String query = "SELECT t.*, c.name AS client_name, c.client_id, ca.name AS cashier_name, a.credit FROM TRANSACTIONS t INNER JOIN ACCOUNTS a ON t.account_id = a.account_id INNER JOIN CLIENTS c ON a.client_id = c.client_id INNER JOIN CASHIERS ca ON t.cashier_id = ca.cashier_id ";
         if (clientId != null) {
             query += "WHERE c.client_id = ?";
         } else if (name != null) {
-            query += "WHERE name LIKE ?";
+            query += "WHERE c.name LIKE ?";
         } else {
             query += "WHERE a.credit BETWEEN ? AND ?";
         }
@@ -215,7 +219,7 @@ public class ReportDao {
      * @param date2
      * @return
      */
-    public Cashier chasiersWithMoreTransactions(java.sql.Date date1, java.sql.Date date2) {
+    public Cashier casiersWithMoreTransactions(java.sql.Date date1, java.sql.Date date2) {
         Cashier top = null;
         String query = "SELECT ca.*, w.workday, w.start_time, w.end_time, COUNT(t.transaction_id) AS quantity FROM TRANSACTIONS t INNER JOIN CASHIERS ca ON t.cashier_id = ca.cashier_id INNER JOIN WORKDAYS w ON w.workday_id = ca.workday_id "
                 + "WHERE t.created_on BETWEEN ? AND ? GROUP BY ca.cashier_id ORDER BY quantity DESC LIMIT 1";

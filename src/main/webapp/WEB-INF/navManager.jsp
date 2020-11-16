@@ -6,6 +6,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reportes
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="ReportController?action=manager1">Historial de actualizaciones</a>
+                        <a class="dropdown-item" href="ReportController?action=manager2">Clientes con transacciones mayores a</a>
+                        <a class="dropdown-item" href="ReportController?action=manager3">Clientes con transacciones sumadas</a>
+                        <a class="dropdown-item" href="ReportController?action=manager4">Clientes Top10</a>
+                        <a class="dropdown-item" href="ReportController?action=manager5">Clientes inactivos</a>
+                        <a class="dropdown-item" href="ReportController?action=manager6">Historial de Transacciones por cliente</a>
+                        <a class="dropdown-item" href="ReportController?action=manager7">Cajero Top1</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="ManagerCashController?action=searchCashiers">Cajeros</a>
                 </li>
@@ -17,7 +31,6 @@
                         Cuenta
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Ver Reportes</a>
                         <a class="dropdown-item" href="ManagerController?action=updateData">Actualizar Datos</a>
                         <a class="dropdown-item" href="ManagerController?action=signOff">Cerrar Sesion</a>
                     </div>

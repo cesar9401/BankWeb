@@ -6,6 +6,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reportes
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Transacciones Top15 del año</a>
+                        <a class="dropdown-item" href="#">Transacciones por periodo</a>
+                        <a class="dropdown-item" href="#">Transacciones Cuenta Top1</a>
+                        <a class="dropdown-item" href="#">Asociaciones recibidas</a>
+                        <a class="dropdown-item" href="#">Asociaciones enviadas</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a href="ClientController?action=respondToRequests" class="nav-link">Solicitudes <span class="badge badge-light">${requests.size()}</span></a>
                 </li>

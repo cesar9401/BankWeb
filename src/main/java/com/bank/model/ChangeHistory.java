@@ -23,6 +23,9 @@ public class ChangeHistory {
     private String clientName;
     private String cashierName;
     private String managerName;
+    
+    private String changedName;
+    private int changedId;
 
     public ChangeHistory(ResultSet rs) throws SQLException {
         this.changeId = rs.getInt("change_id");
@@ -132,6 +135,22 @@ public class ChangeHistory {
         this.managerName = managerName;
     }
 
+    public String getChangedName() {
+        return changedName;
+    }
+
+    public void setChangedName(String changedName) {
+        this.changedName = changedName;
+    }
+
+    public int getChangedId() {
+        return changedId;
+    }
+
+    public void setChangedId(int changedId) {
+        this.changedId = changedId;
+    }
+    
     @Override
     public String toString() {
         return "ChangeHistory{" + "changeId=" + changeId + ", managerMainId=" + managerMainId + ", description=" + description + ", createdAt=" + createdAt + ", cashierName=" + cashierName + '}';

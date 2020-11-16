@@ -47,7 +47,7 @@
                     <hr>
                     <div class="row">
                         <div class="col text-center">
-                            <h4 class="font-weight-bold text-danger">Datos Deposito</h4>
+                            <h4 class="font-weight-bold text-danger">Datos Retiro</h4>
                         </div>
                     </div>
                     <div class="row">
