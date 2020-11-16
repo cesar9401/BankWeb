@@ -32,6 +32,7 @@ public class Transaction {
     private Double total;
     
     private Double credit;
+    private java.sql.Date dateAccount;
 
     public Transaction(Element e) {
         this.transactionId = Integer.parseInt(e.getChildText("CODIGO"));
@@ -196,6 +197,14 @@ public class Transaction {
 
     public void setCredit(Double credit) {
         this.credit = credit;
+    }
+
+    public Date getDateAccount() {
+        return dateAccount;
+    }
+
+    public void setDateAccount(Date dateAccount) {
+        this.dateAccount = dateAccount;
     }
     
     @Override

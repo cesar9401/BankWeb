@@ -1,12 +1,8 @@
 package com.bank.control;
 
 import com.bank.conexion.Conexion;
-import com.bank.dao.ReportDao;
-import com.bank.model.Account;
-import com.bank.model.Cashier;
-import com.bank.model.ChangeHistory;
-import com.bank.model.Client;
-import com.bank.model.Transaction;
+import com.bank.dao.*;
+import com.bank.model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -27,6 +23,7 @@ public class ReportController extends HttpServlet {
 
     private final Connection conexion = Conexion.getConnection();
     private final ReportDao reportDao = new ReportDao(conexion);
+    private final AccountDao accountDao = new AccountDao(conexion);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -112,15 +109,69 @@ public class ReportController extends HttpServlet {
                 setReportCashier(request, response);
                 break;
 
+            case "client1":
+                int code = (int) request.getSession().getAttribute("code");
+                List<Account> accounts = accountDao.getAccounts(code, false);
+                request.setAttribute("accounts", accounts);
+                request.setAttribute("client1", true);
+                setReportClient(request, response);
+                break;
+
+            case "client2":
+                request.setAttribute("client2", true);
+                setReportClient(request, response);
+                break;
+
+            case "client3":
+                request.setAttribute("client3", true);
+                setReportClient(request, response);
+                break;
+
+            case "client4":
+                getClient4(request, response);
+                break;
+
+            case "client5":
+                getClient5(request, response);
+                break;
+
         }
     }
 
+    /**
+     * Redirigir a reportes del gerente
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void setReportManager(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("manager-reports.jsp").forward(request, response);
     }
 
+    /**
+     * Redirigir a reportes del cajero
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void setReportCashier(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("cashier-reports.jsp").forward(request, response);
+    }
+
+    /**
+     * Redigir a reportes del cliente
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void setReportClient(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("client-reports.jsp").forward(request, response);
     }
 
     /**
@@ -138,35 +189,36 @@ public class ReportController extends HttpServlet {
         switch (action) {
             case "getManager1":
                 getManager1(request, response);
-
                 break;
-
             case "getManager2":
                 getManager2(request, response);
                 break;
-
             case "getManager3":
                 getManager3(request, response);
                 break;
-
             case "getManager5":
                 getManager5(request, response);
                 break;
-
             case "getManager6":
                 getManager6(request, response);
                 break;
-
             case "getManager7":
                 getManager7(request, response);
                 break;
-
             case "getCashier1":
                 getCashier1(request, response);
                 break;
-
             case "getCashier2":
                 getCashier2(request, response);
+                break;
+            case "getClient1":
+                getClient1(request, response);
+                break;
+            case "getClient2":
+                getClient2(request, response);
+                break;
+            case "getClient3":
+                getClient3(request, response);
                 break;
         }
     }
@@ -281,5 +333,65 @@ public class ReportController extends HttpServlet {
         request.setAttribute("date2", date2);
         request.setAttribute("cashier2", true);
         setReportCashier(request, response);
+    }
+
+    private void getClient1(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = (int) request.getSession().getAttribute("code");
+        int account = Integer.parseInt(request.getParameter("client-account"));
+        int year = Integer.parseInt(request.getParameter("client-year"));
+        List<Transaction> top15 = reportDao.top15TransactionsForYear(account, year);
+
+        request.setAttribute("top15", top15);
+        request.setAttribute("account", account);
+        request.setAttribute("year", year);
+
+        List<Account> accounts = accountDao.getAccounts(code, false);
+        request.setAttribute("accounts", accounts);
+        request.setAttribute("client1", true);
+        setReportClient(request, response);
+    }
+
+    private void getClient2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = (int) request.getSession().getAttribute("code");
+        java.sql.Date date1 = ReadXml.getDate(request.getParameter("date1"));
+        java.sql.Date date2 = ReadXml.getDate(request.getParameter("date2"));
+        List<Transaction> transactions = reportDao.transactionsDuringPeriod(code, date1, date2);
+
+        request.setAttribute("transactions", transactions);
+        request.setAttribute("date1", date1);
+        request.setAttribute("date2", date2);
+
+        request.setAttribute("client2", true);
+        setReportClient(request, response);
+    }
+
+    private void getClient3(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = (int) request.getSession().getAttribute("code");
+        java.sql.Date date1 = ReadXml.getDate(request.getParameter("date1"));
+        java.sql.Date date2 = ReadXml.getDate(request.getParameter("date2"));
+        List<Transaction> top1 = reportDao.getTrasactionsAccountWithMoreMoney(code, date1, date2);
+
+        request.setAttribute("top1", top1);
+        request.setAttribute("date1", date1);
+        request.setAttribute("date2", date2);
+
+        request.setAttribute("client3", true);
+        setReportClient(request, response);
+    }
+
+    private void getClient4(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = (int) request.getSession().getAttribute("code");
+        List<AssociatedAccount> received = reportDao.getRequestReceived(code);
+        request.setAttribute("received", received);
+        request.setAttribute("client4", true);
+        setReportClient(request, response);
+    }
+
+    private void getClient5(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int code = (int) request.getSession().getAttribute("code");
+        List<AssociatedAccount> sent = reportDao.getRequestSent(code);
+        request.setAttribute("sent", sent);
+        request.setAttribute("client5", true);
+        setReportClient(request, response);
     }
 }

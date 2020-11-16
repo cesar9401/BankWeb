@@ -49,7 +49,7 @@
                     <div class="row" id="cashier1" hidden>
                         <div class="col my-4">
                             <table class="table table-striped">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">Id Transacci&oacute;n</th>
                                         <th scope="col">Cuenta</th>
@@ -79,7 +79,7 @@
                 <div class="row" id="cashier2" hidden>
                     <div class="col my-4">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Id Transacci&oacute;n</th>
                                     <th scope="col">Cuenta</th>

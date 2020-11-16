@@ -99,7 +99,7 @@
                     <div class="row" id="manager1" hidden>
                         <div class="col my-4">
                             <table class="table table-striped">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">N&uacute;mero</th>
                                         <th scope="col">Reponsable</th>
@@ -127,7 +127,7 @@
                 <div class="row" id="manager2" hidden>
                     <div class="col my-4">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">N&uacute;mero</th>
                                     <th scope="col">Id Cliente</th>
@@ -157,7 +157,7 @@
                 <div class="row" id="manager3" hidden>
                     <div class="col my-4">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Id Cliente</th>
                                     <th scope="col">Nombre</th>
@@ -185,7 +185,7 @@
                 <div class="row" id="manager4" hidden>
                     <div class="col my-4">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Id Cliente</th>
                                     <th scope="col">Nombre</th>
@@ -215,7 +215,7 @@
                 <div class="row" id="manager5" hidden>
                     <div class="col my-4">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Id Cliente</th>
                                     <th scope="col">Nombre</th>
@@ -243,7 +243,7 @@
                 <div class="row" id="manager6" hidden>
                     <div class="col my-4">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Id Transaction</th>
                                     <th scope="col">Id Cliente</th>
@@ -273,7 +273,7 @@
 
                 <!--Reporte 7-->
                 <div class="row" id="manager7" hidden>
-                    <div class="col my-4">
+                    <div class="col my-4" class="thead-dark">
                         <table class="table table-striped">
                             <thead>
                                 <tr>

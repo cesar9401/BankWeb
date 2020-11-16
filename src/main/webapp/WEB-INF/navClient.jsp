@@ -11,11 +11,11 @@
                         Reportes
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Transacciones Top15 del año</a>
-                        <a class="dropdown-item" href="#">Transacciones por periodo</a>
-                        <a class="dropdown-item" href="#">Transacciones Cuenta Top1</a>
-                        <a class="dropdown-item" href="#">Asociaciones recibidas</a>
-                        <a class="dropdown-item" href="#">Asociaciones enviadas</a>
+                        <a class="dropdown-item" href="ReportController?action=client1">Transacciones Top15 del año</a>
+                        <a class="dropdown-item" href="ReportController?action=client2">Transacciones por periodo</a>
+                        <a class="dropdown-item" href="ReportController?action=client3">Transacciones Cuenta Top1</a>
+                        <a class="dropdown-item" href="ReportController?action=client4">Asociaciones recibidas</a>
+                        <a class="dropdown-item" href="ReportController?action=client5">Asociaciones enviadas</a>
                     </div>
                 </li>
                 <li class="nav-item">

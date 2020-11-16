@@ -370,7 +370,10 @@ public class ReportDao {
             ps.setDate(3, date2);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    transactions.add(new Transaction(rs));
+                    Transaction tmp = new Transaction(rs);
+                    tmp.setCredit(rs.getDouble("credit"));
+                    tmp.setDateAccount(rs.getDate("account_created"));
+                    transactions.add(tmp);
                 }
             }
         } catch (SQLException ex) {
