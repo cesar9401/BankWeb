@@ -278,7 +278,7 @@ public class ReportDao {
     public List<Transaction> getTrasactionsInTurnDuringPeriod(int cashierId, java.sql.Date date1, java.sql.Date date2) {
         List<Transaction> turn = new ArrayList<>();
         String query = "SELECT t.*, c.name AS client_name, c.client_id, ca.name AS cashier_name FROM TRANSACTIONS t INNER JOIN ACCOUNTS a ON t.account_id = a.account_id INNER JOIN CLIENTS c ON a.client_id = c.client_id INNER JOIN CASHIERS ca ON t.cashier_id = ca.cashier_id "
-                + "WHERE t.cashier_id = ? AND t.created_on BETWENN ? AND ?";
+                + "WHERE t.cashier_id = ? AND t.created_on BETWEEN ? AND ?";
         try {
             PreparedStatement ps = this.conexion.prepareStatement(query);
             ps.setInt(1, cashierId);

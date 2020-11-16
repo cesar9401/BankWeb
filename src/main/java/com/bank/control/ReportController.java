@@ -102,11 +102,25 @@ public class ReportController extends HttpServlet {
                 setReportManager(request, response);
                 break;
 
+            case "cashier1":
+                request.setAttribute("cashier1", true);
+                setReportCashier(request, response);
+                break;
+
+            case "cashier2":
+                request.setAttribute("cashier2", true);
+                setReportCashier(request, response);
+                break;
+
         }
     }
 
     private void setReportManager(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("manager-reports.jsp").forward(request, response);
+    }
+
+    private void setReportCashier(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("cashier-reports.jsp").forward(request, response);
     }
 
     /**
@@ -145,6 +159,14 @@ public class ReportController extends HttpServlet {
 
             case "getManager7":
                 getManager7(request, response);
+                break;
+
+            case "getCashier1":
+                getCashier1(request, response);
+                break;
+
+            case "getCashier2":
+                getCashier2(request, response);
                 break;
         }
     }
@@ -235,5 +257,29 @@ public class ReportController extends HttpServlet {
 
         request.setAttribute("manager7", true);
         setReportManager(request, response);
+    }
+
+    private void getCashier1(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int cashierId = (int) request.getSession().getAttribute("code");
+        java.sql.Date date = ReadXml.getDate(request.getParameter("date1"));
+        List<Transaction> turn = reportDao.getTrasactionsInTurn(cashierId, date);
+
+        request.setAttribute("turn", turn);
+        request.setAttribute("date", date);
+        request.setAttribute("cashier1", true);
+        setReportCashier(request, response);
+    }
+
+    private void getCashier2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int cashierId = (int) request.getSession().getAttribute("code");
+        java.sql.Date date1 = ReadXml.getDate(request.getParameter("date1"));
+        java.sql.Date date2 = ReadXml.getDate(request.getParameter("date2"));
+
+        List<Transaction> transactions = reportDao.getTrasactionsInTurnDuringPeriod(cashierId, date1, date2);
+        request.setAttribute("transactions", transactions);
+        request.setAttribute("date1", date1);
+        request.setAttribute("date2", date2);
+        request.setAttribute("cashier2", true);
+        setReportCashier(request, response);
     }
 }

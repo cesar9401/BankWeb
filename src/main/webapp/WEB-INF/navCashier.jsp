@@ -11,8 +11,8 @@
                         Reportes
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Transacciones del d&iacute;a</a>
-                        <a class="dropdown-item" href="#">Transacciones por d&iacute;a</a>
+                        <a class="dropdown-item" href="ReportController?action=cashier1">Transacciones del d&iacute;a</a>
+                        <a class="dropdown-item" href="ReportController?action=cashier2">Transacciones por d&iacute;a en un intervalo de tiempo</a>
                     </div>
                 </li>
                 <li class="nav-item">
