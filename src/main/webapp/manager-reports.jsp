@@ -96,208 +96,262 @@
                     </div>
 
                     <!--Reporte 1-->
-                    <div class="row" id="manager1" hidden>
+                    <div id="manager1" hidden>
+                        <div class="row">
+                            <div class="col my-4">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">N&uacute;mero</th>
+                                            <th scope="col">Codigo</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Descripcion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="h" items="${history}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${h.changeId}</th>
+                                            <td class="align-middle">${h.changedId}</td>
+                                            <td class="align-middle">${h.changedName}</td>
+                                            <td class="align-middle">${h.description}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=manager1&entity=${entity}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>                        
+                </div>
+
+
+                <!--Reporte 2-->
+                <div id="manager2" hidden>
+                    <div class="row">
                         <div class="col my-4">
                             <table class="table table-striped">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">N&uacute;mero</th>
-                                        <th scope="col">Reponsable</th>
-                                        <th scope="col">Codigo</th>
+                                        <th scope="col">Id Cliente</th>
                                         <th scope="col">Nombre</th>
-                                        <th scope="col">Descripcion</th>
+                                        <th scope="col">Cuenta</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Monto</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="h" items="${history}">
-                                    <tr>
-                                        <th scope="row" class="align-middle">${h.changeId}</th>
-                                        <td class="align-middle">${h.managerMainId} - ${h.managerMainName}</td>
-                                        <td class="align-middle">${h.changedId}</td>
-                                        <td class="align-middle">${h.changedName}</td>
-                                        <td class="align-middle">${h.description}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                    <c:forEach var="t" items="${transactions}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${t.transactionId}</th>
+                                            <td class="align-middle">${t.clientId}</td>
+                                            <td class="align-middle">${t.clientName}</td>
+                                            <td class="align-middle">${t.accountId}</td>
+                                            <td class="align-middle">${t.type}</td>
+                                            <td class="align-middle">Q. ${t.amount}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=manager2&limit=${limit}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>    
                 </div>
 
-                <!--Reporte 2-->
-                <div class="row" id="manager2" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">N&uacute;mero</th>
-                                    <th scope="col">Id Cliente</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Monto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="t" items="${transactions}">
-                                    <tr>
-                                        <th scope="row" class="align-middle">${t.transactionId}</th>
-                                        <td class="align-middle">${t.clientId}</td>
-                                        <td class="align-middle">${t.clientName}</td>
-                                        <td class="align-middle">${t.accountId}</td>
-                                        <td class="align-middle">${t.type}</td>
-                                        <td class="align-middle">Q. ${t.amount}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
                 <!--Reporte 3-->
-                <div class="row" id="manager3" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Cliente</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">DPI</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="s" items="${summed}">
+                <div id="manager3" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row" class="align-middle">${s.clientId}</th>
-                                        <td class="align-middle">${s.clientName}</td>
-                                        <td class="align-middle">${s.dpi}</td>
-                                        <td class="align-middle">${s.type}</td>
-                                        <td class="align-middle">${s.total}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                        <th scope="col">Id Cliente</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">DPI</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="s" items="${summed}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${s.clientId}</th>
+                                            <td class="align-middle">${s.clientName}</td>
+                                            <td class="align-middle">${s.dpi}</td>
+                                            <td class="align-middle">${s.type}</td>
+                                            <td class="align-middle">${s.total}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=manager3&limit=${limit}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div> 
                 </div>
 
                 <!--Reporte 4-->
-                <div class="row" id="manager4" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Cliente</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">DPI</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Saldo</th>
-                                    <th scope="col">Fecha de Creacion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="a" items="${accounts}">
+                <div id="manager4" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row" class="align-middle">${a.clientId}</th>
-                                        <td class="align-middle">${a.name}</td>
-                                        <td class="align-middle">${a.dpi}</td>
-                                        <td class="align-middle">${a.accountId}</td>
-                                        <td class="align-middle">Q. ${a.credit}</td>
-                                        <td class="align-middle">${a.createdOn}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                        <th scope="col">Id Cliente</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">DPI</th>
+                                        <th scope="col">Cuenta</th>
+                                        <th scope="col">Saldo</th>
+                                        <th scope="col">Fecha de Creacion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="a" items="${accounts}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${a.clientId}</th>
+                                            <td class="align-middle">${a.name}</td>
+                                            <td class="align-middle">${a.dpi}</td>
+                                            <td class="align-middle">${a.accountId}</td>
+                                            <td class="align-middle">Q. ${a.credit}</td>
+                                            <td class="align-middle">${a.createdOn}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=manager4" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
                     </div>
                 </div>
 
                 <!--Reporte 5-->
-                <div class="row" id="manager5" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Cliente</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">DPI</th>
-                                    <th scope="col">Genero</th>
-                                    <th scope="col">Fecha de Nacimiento</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="c" items="${clients}">
+                <div id="manager5" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row" class="align-middle">${c.clientId}</th>
-                                        <td class="align-middle">${c.name}</td>
-                                        <td class="align-middle">${c.dpi}</td>
-                                        <td class="align-middle">${c.sex}</td>
-                                        <td class="align-middle">${c.birth}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                        <th scope="col">Id Cliente</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">DPI</th>
+                                        <th scope="col">Genero</th>
+                                        <th scope="col">Fecha de Nacimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="c" items="${clients}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${c.clientId}</th>
+                                            <td class="align-middle">${c.name}</td>
+                                            <td class="align-middle">${c.dpi}</td>
+                                            <td class="align-middle">${c.sex}</td>
+                                            <td class="align-middle">${c.birth}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=manager5&date1=${date1}&date2=${date2}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
                     </div>
                 </div>
 
                 <!--Reporte 6-->
-                <div class="row" id="manager6" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Transaction</th>
-                                    <th scope="col">Id Cliente</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Monto</th>
-                                    <th scope="col">Credito Actual</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="t" items="${transactions}">
+                <div id="manager6" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row" class="align-middle">${t.transactionId}</th>
-                                        <td class="align-middle">${t.clientId}</td>
-                                        <td class="align-middle">${t.clientName}</td>
-                                        <td class="align-middle">${t.accountId}</td>
-                                        <td class="align-middle">${t.type}</td>
-                                        <td class="align-middle">Q. ${t.amount}</td>
-                                        <td class="align-middle">Q. ${t.credit}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                        <th scope="col">Id Transaction</th>
+                                        <th scope="col">Id Cliente</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Cuenta</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Credito Actual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="t" items="${transactions}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${t.transactionId}</th>
+                                            <td class="align-middle">${t.clientId}</td>
+                                            <td class="align-middle">${t.clientName}</td>
+                                            <td class="align-middle">${t.accountId}</td>
+                                            <td class="align-middle">${t.type}</td>
+                                            <td class="align-middle">Q. ${t.amount}</td>
+                                            <td class="align-middle">Q. ${t.credit}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a id="link-6" href="#" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
                     </div>
                 </div>
 
+
                 <!--Reporte 7-->
-                <div class="row" id="manager7" hidden>
-                    <div class="col my-4" class="thead-dark">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Id Cajero</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">DPI</th>
-                                    <th scope="col">Genero</th>
-                                    <th scope="col">Jornada</th>
-                                    <th scope="col">Total transacciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row" class="align-middle">${cashier.cashierId}</th>
-                                    <td class="align-middle">${cashier.name}</td>
-                                    <td class="align-middle">${cashier.dpi}</td>
-                                    <td class="align-middle">${cashier.sex}</td>
-                                    <td class="align-middle">${cashier.workDayName}</td>
-                                    <td class="align-middle">${cashier.quantity}</td>
-                                </tr> 
-                            </tbody>
-                        </table>
+                <div id="manager7" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Id Cajero</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">DPI</th>
+                                        <th scope="col">Genero</th>
+                                        <th scope="col">Jornada</th>
+                                        <th scope="col">Total transacciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="align-middle">${cashier.cashierId}</th>
+                                        <td class="align-middle">${cashier.name}</td>
+                                        <td class="align-middle">${cashier.dpi}</td>
+                                        <td class="align-middle">${cashier.sex}</td>
+                                        <td class="align-middle">${cashier.workDayName}</td>
+                                        <td class="align-middle">${cashier.quantity}</td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=manager7&date1=${date1}&date2=${date2}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>        
                 </div>
+
 
             </div>
         </section>
@@ -397,6 +451,14 @@
                     $('#btn-report-manager').prop("value", "getManager6");
                     <c:if test="${transactions != null}">
                     $('#manager6').prop("hidden", false);
+                    let type = "${type}";
+                    if (type === "Codigo") {
+                        $("#link-6").prop("href", "ControllerPdf?action=manager6&type=${type}&code=${code}");
+                    } else if (type === "Nombre") {
+                        $("#link-6").prop("href", "ControllerPdf?action=manager6&type=${type}&name=${name}");
+                    } else {
+                        $("#link-6").prop("href", "ControllerPdf?action=manager6&type=${type}&limit1=${limit1}&limit2=${limit2}");
+                    }
                     </c:if>
                 </script>
             </c:when>

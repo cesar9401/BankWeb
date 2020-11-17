@@ -280,20 +280,24 @@ public class ReportController extends HttpServlet {
         switch (type) {
             case "Codigo":
                 Integer code = Integer.parseInt(request.getParameter("client-code"));
+                request.setAttribute("code", code);
                 transactions = reportDao.transactionHistoryByClients(code, null, null, null);
                 break;
             case "Nombre":
                 String name = request.getParameter("client-name");
+                request.setAttribute("name", name);
                 transactions = reportDao.transactionHistoryByClients(null, name, null, null);
                 break;
             case "Limite":
                 Double limit1 = Double.parseDouble(request.getParameter("limit1"));
                 Double limit2 = Double.parseDouble(request.getParameter("limit2"));
+                request.setAttribute("limit1", limit1);
+                request.setAttribute("limit2", limit2);
                 transactions = reportDao.transactionHistoryByClients(null, null, limit1, limit2);
                 break;
         }
         request.setAttribute("type", type);
-        request.setAttribute("transactions", transactions);
+        request.getSession().setAttribute("transactions", transactions);
         request.setAttribute("manager6", true);
         setReportManager(request, response);
     }

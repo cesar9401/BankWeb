@@ -46,7 +46,47 @@
                     </div>
 
                     <!--Reporte 1-->
-                    <div class="row" id="cashier1" hidden>
+                    <div id="cashier1" hidden>
+                        <div class="row">
+                            <div class="col my-4">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Id Transacci&oacute;n</th>
+                                            <th scope="col">Cuenta</th>
+                                            <th scope="col">Tipo</th>
+                                            <th scope="col">Monto</th>
+                                            <th scope="col">Id Cliente</th>
+                                            <th scope="col">Nombre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="t" items="${turn}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${t.transactionId}</th>
+                                            <td class="align-middle">${t.accountId}</td>
+                                            <td class="align-middle">${t.type}</td>
+                                            <td class="align-middle">${t.amount}</td>
+                                            <td class="align-middle">${t.clientId}</td>
+                                            <td class="align-middle">${t.clientName}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=cashier1&date=${date}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>                        
+                </div>
+
+
+                <!--Reporte 2-->
+                <div id="cashier2" hidden>
+                    <div class="row">
                         <div class="col my-4">
                             <table class="table table-striped">
                                 <thead class="thead-dark">
@@ -56,54 +96,32 @@
                                         <th scope="col">Tipo</th>
                                         <th scope="col">Monto</th>
                                         <th scope="col">Id Cliente</th>
-                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Fecha</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${turn}">
-                                    <tr>
-                                        <th scope="row" class="align-middle">${t.transactionId}</th>
-                                        <td class="align-middle">${t.accountId}</td>
-                                        <td class="align-middle">${t.type}</td>
-                                        <td class="align-middle">${t.amount}</td>
-                                        <td class="align-middle">${t.clientId}</td>
-                                        <td class="align-middle">${t.clientName}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                    <c:forEach var="t" items="${transactions}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${t.transactionId}</th>
+                                            <td class="align-middle">${t.accountId}</td>
+                                            <td class="align-middle">${t.type}</td>
+                                            <td class="align-middle">${t.amount}</td>
+                                            <td class="align-middle">${t.clientId}</td>
+                                            <td class="align-middle">${t.createdOn}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdf?action=cashier2&date1=${date1}&date2=${date2}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
                     </div>
                 </div>
-                    
-                <!--Reporte 2-->
-                <div class="row" id="cashier2" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Transacci&oacute;n</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Monto</th>
-                                    <th scope="col">Id Cliente</th>
-                                    <th scope="col">Fecha</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="t" items="${transactions}">
-                                    <tr>
-                                        <th scope="row" class="align-middle">${t.transactionId}</th>
-                                        <td class="align-middle">${t.accountId}</td>
-                                        <td class="align-middle">${t.type}</td>
-                                        <td class="align-middle">${t.amount}</td>
-                                        <td class="align-middle">${t.clientId}</td>
-                                        <td class="align-middle">${t.createdOn}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
 
             </div>
         </section>

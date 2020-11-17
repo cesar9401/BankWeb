@@ -26,6 +26,8 @@ public class Account {
     private int associatedId;
     private String status;
     private int tryNumber;
+    
+    private String date;
 
     public Account(int accountId, Date createdOn, Double credit) {
         this.accountId = accountId;
@@ -54,6 +56,7 @@ public class Account {
         this.credit = rs.getDouble("credit");
         this.name = rs.getString("name");
         this.dpi = rs.getString("dpi");
+        this.date = this.createdOn.toString();
     }
 
     public int getAccountId() {
@@ -126,6 +129,14 @@ public class Account {
 
     public void setDpi(String dpi) {
         this.dpi = dpi;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
     
     @Override

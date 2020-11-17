@@ -33,6 +33,8 @@ public class Transaction {
     
     private Double credit;
     private java.sql.Date dateAccount;
+    
+    private String date;
 
     public Transaction(Element e) {
         this.transactionId = Integer.parseInt(e.getChildText("CODIGO"));
@@ -66,6 +68,7 @@ public class Transaction {
         this.clientName = rs.getString("client_name");
         this.clientId = rs.getInt("client_id");
         this.cashierName = rs.getString("cashier_name");
+        this.date = createdOn.toString();
     }
 
     public Transaction(int transactionId, int accountId, Date createdOn, Time createdAt, String type, Double amount, int cashierId) {
@@ -205,6 +208,14 @@ public class Transaction {
 
     public void setDateAccount(Date dateAccount) {
         this.dateAccount = dateAccount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
     
     @Override

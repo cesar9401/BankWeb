@@ -25,6 +25,7 @@ public class Client extends Person {
     private String strPdfDpi;
     private InputStream pdfDpi;
     private List<Account> accounts;
+    private String date;
 
     //Cuando un cliente se registre, fecha de creacion de cuenta
     private java.sql.Date createdOn;
@@ -47,6 +48,7 @@ public class Client extends Person {
         super(rs);
         this.clientId = rs.getInt("client_id");
         this.birth = rs.getDate("birth");
+        this.date = birth.toString();
     }
 
     public Client(HttpServletRequest request, boolean isNew) throws UnsupportedEncodingException {
@@ -115,6 +117,14 @@ public class Client extends Person {
         this.createdOn = createdOn;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    
     @Override
     public String toString() {
         return super.toString() + " Client{" + "clientId=" + clientId + ", birth=" + birth + '}';

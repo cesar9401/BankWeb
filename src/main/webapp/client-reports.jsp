@@ -65,95 +65,53 @@
                 </div>
 
                 <!--Reporte 1-->
-                <div class="row" id="client1" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Transacci&oacute;n</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Monto</th>
-                                    <th scope="col">Cajero</th>
-                                    <th scope="col">Fecha</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="t" items="${top15}">
-                                    <tr>
-                                        <th scope="row" class="align-middle">${t.transactionId}</th>
-                                        <td class="align-middle">${t.accountId}</td>
-                                        <td class="align-middle">${t.type}</td>
-                                        <td class="align-middle">Q. ${t.amount}</td>
-                                        <td class="align-middle">${t.cashierId}</td>
-                                        <td class="align-middle">${t.createdOn}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!--Reporte 2-->
-                <div class="row" id="client2" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Transacci&oacute;n</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Monto</th>
-                                    <th scope="col">Saldo por Transacción</th>
-                                    <th scope="col">Cajero</th>
-                                    <th scope="col">Fecha</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="t" items="${transactions}">
-                                    <tr>
-                                        <th scope="row" class="align-middle">${t.transactionId}</th>
-                                        <td class="align-middle">${t.accountId}</td>
-                                        <td class="align-middle">${t.type}</td>
-                                        <td class="align-middle">Q. ${t.amount}</td>
-                                        <td class="align-middle">Q. ${t.balance}</td>
-                                        <td class="align-middle">${t.cashierId}</td>
-                                        <td class="align-middle">${t.createdOn}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!--Reporte 3-->
-                <div id="client3" hidden>
-                    <div class="row">
-                        <div class="col ny-4">
-                            <table class="table">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Cuenta</th>
-                                        <th scope="col">Fecha de Creacion</th>
-                                        <th scope="col">Credito</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>${top1.get(0).accountId}</td>
-                                        <td>${top1.get(0).dateAccount}</td>
-                                        <td>Q. ${top1.get(0).credit}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div id="client1" hidden>
                     <div class="row">
                         <div class="col my-4">
                             <table class="table table-striped">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">Id Transacci&oacute;n</th>
+                                        <th scope="col">Cuenta</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Cajero</th>
+                                        <th scope="col">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="t" items="${top15}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${t.transactionId}</th>
+                                            <td class="align-middle">${t.accountId}</td>
+                                            <td class="align-middle">${t.type}</td>
+                                            <td class="align-middle">Q. ${t.amount}</td>
+                                            <td class="align-middle">${t.cashierId}</td>
+                                            <td class="align-middle">${t.createdOn}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdfClient?action=client1&account=${account}&year=${year}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Reporte 2-->
+                <div id="client2" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Id Transacci&oacute;n</th>
+                                        <th scope="col">Cuenta</th>
                                         <th scope="col">Tipo</th>
                                         <th scope="col">Monto</th>
                                         <th scope="col">Saldo por Transacción</th>
@@ -162,9 +120,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="t" items="${top1}">
+                                    <c:forEach var="t" items="${transactions}">
                                         <tr>
                                             <th scope="row" class="align-middle">${t.transactionId}</th>
+                                            <td class="align-middle">${t.accountId}</td>
                                             <td class="align-middle">${t.type}</td>
                                             <td class="align-middle">Q. ${t.amount}</td>
                                             <td class="align-middle">Q. ${t.balance}</td>
@@ -175,70 +134,143 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>                    
+                    </div>
+
+                </div>
+
+
+                <!--Reporte 3-->
+                <div id="client3" hidden>
+                    <div>
+                        <div class="row">
+                            <div class="col my-4">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Cuenta</th>
+                                            <th scope="col">Fecha de Creacion</th>
+                                            <th scope="col">Credito</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>${top1.get(0).accountId}</td>
+                                            <td>${top1.get(0).dateAccount}</td>
+                                            <td>Q. ${top1.get(0).credit}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col my-4">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Id Transacci&oacute;n</th>
+                                            <th scope="col">Tipo</th>
+                                            <th scope="col">Monto</th>
+                                            <th scope="col">Saldo por Transacción</th>
+                                            <th scope="col">Cajero</th>
+                                            <th scope="col">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="t" items="${top1}">
+                                            <tr>
+                                                <th scope="row" class="align-middle">${t.transactionId}</th>
+                                                <td class="align-middle">${t.type}</td>
+                                                <td class="align-middle">Q. ${t.amount}</td>
+                                                <td class="align-middle">Q. ${t.balance}</td>
+                                                <td class="align-middle">${t.cashierId}</td>
+                                                <td class="align-middle">${t.createdOn}</td>
+                                            </tr> 
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                    
+                    </div>  
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdfClient?action=client3&date1=${date1}&date2=${date2}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>                
                 </div>
 
                 <!--Reporte 4-->
-                <div class="row" id="client4" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Asociaci&oacute;n</th>
-                                    <th scope="col">Id Cliente(Solicita)</th>
-                                    <th scope="col">Nombre(Solicita)</th>
-                                    <th scope="col">Mi Cuenta</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Intento</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="r" items="${received}">
+                <div id="client4" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row" class="align-middle">${r.associatedId}</th>
-                                        <td class="align-middle">${r.clientId}</td>
-                                        <td class="align-middle">${r.associatedName}</td>
-                                        <td class="align-middle">${r.accountId}</td>
-                                        <td class="align-middle">${r.status}</td>
-                                        <td class="align-middle">${r.tryNumber}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                        <th scope="col">Id Asociaci&oacute;n</th>
+                                        <th scope="col">Id Cliente(Solicita)</th>
+                                        <th scope="col">Nombre(Solicita)</th>
+                                        <th scope="col">Mi Cuenta</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Intento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="r" items="${received}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${r.associatedId}</th>
+                                            <td class="align-middle">${r.clientId}</td>
+                                            <td class="align-middle">${r.associatedName}</td>
+                                            <td class="align-middle">${r.accountId}</td>
+                                            <td class="align-middle">${r.status}</td>
+                                            <td class="align-middle">${r.tryNumber}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdfClient?action=client4" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>                       
                 </div>
 
                 <!--Reporte 5-->
-                <div class="row" id="client5" hidden>
-                    <div class="col my-4">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id Asociaci&oacute;n</th>
-                                    <th scope="col">Id Cliente(Propietario)</th>
-                                    <th scope="col">Nombre(Propietario)</th>
-                                    <th scope="col">Cuenta</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Intento</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="s" items="${sent}">
+                <div id="client5" hidden>
+                    <div class="row">
+                        <div class="col my-4">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row" class="align-middle">${s.associatedId}</th>
-                                        <td class="align-middle">${s.accountClientId}</td>
-                                        <td class="align-middle">${s.accountName}</td>
-                                        <td class="align-middle">${s.accountId}</td>
-                                        <td class="align-middle">${s.status}</td>
-                                        <td class="align-middle">${s.tryNumber}</td>
-                                    </tr> 
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                        <th scope="col">Id Asociaci&oacute;n</th>
+                                        <th scope="col">Id Cliente(Propietario)</th>
+                                        <th scope="col">Nombre(Propietario)</th>
+                                        <th scope="col">Cuenta</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Intento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="s" items="${sent}">
+                                        <tr>
+                                            <th scope="row" class="align-middle">${s.associatedId}</th>
+                                            <td class="align-middle">${s.accountClientId}</td>
+                                            <td class="align-middle">${s.accountName}</td>
+                                            <td class="align-middle">${s.accountId}</td>
+                                            <td class="align-middle">${s.status}</td>
+                                            <td class="align-middle">${s.tryNumber}</td>
+                                        </tr> 
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdfClient?action=client5" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div>   
                 </div>
-
-
             </div>
         </section>
 
