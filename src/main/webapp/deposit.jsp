@@ -75,7 +75,7 @@
                                         <label for="name">Monto Q.</label>
                                         <input type="number" min="0" step="any" class="form-control text-right" id="amount" name="amount" placeholder="Q. 0.00" required>
                                         <input type="hidden" value="${code}" name="cashierId">
-                                    <input type="hidden" value="DEBITO" name="type">
+                                    <input type="hidden" value="CREDITO" name="type">
                                     <input type="hidden" value="0" name="transactionId">
                                 </div>
                             </div>

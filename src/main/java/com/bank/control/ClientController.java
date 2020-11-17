@@ -272,8 +272,8 @@ public class ClientController extends HttpServlet {
         java.sql.Date date = ReadXml.getDate(request.getParameter("transfer-date"));
         java.sql.Time time = ReadXml.getTime(request.getParameter("transfer-time"));
 
-        Transaction t1 = new Transaction(0, accountOrigin, date, time, "CREDITO", amount, 101);
-        Transaction t2 = new Transaction(0, accountDestination, date, time, "DEBITO", amount, 101);
+        Transaction t1 = new Transaction(0, accountOrigin, date, time, "DEBITO", amount, 101);
+        Transaction t2 = new Transaction(0, accountDestination, date, time, "CREDITO", amount, 101);
         //Cuentas distintas
         if (t1.getAccountId() != t2.getAccountId()) {
 

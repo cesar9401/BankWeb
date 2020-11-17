@@ -51,7 +51,7 @@ public class TransactionDao {
     public int createTransaction(Transaction t) throws SQLException {
         int transactionId = 0;
         double credit = 0;
-        double amount = t.getType().equals("CREDITO") ? (t.getAmount() * -1) : t.getAmount();
+        double amount = t.getType().equals("DEBITO") ? (t.getAmount() * -1) : t.getAmount();
         String queryCredit = "SELECT credit FROM ACCOUNTS WHERE account_id = ?";
         String queryUpd = "UPDATE ACCOUNTS SET credit = credit + ? WHERE account_id = ?";
         String queryTransaction = "INSERT INTO TRANSACTIONS(transaction_id, account_id, created_on, created_at, type, amount, cashier_id, balance) VALUES(?, ?, ?, ?, ?, ?, ?, "
