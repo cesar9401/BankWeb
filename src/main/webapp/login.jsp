@@ -23,8 +23,8 @@
                                 </div>
                             </div>
                             <h1 class="h3 mb-3 font-weight-normal text-center">Iniciar Sesi&oacute;n</h1>
-                            <input type="number" min="0" id="inputId" class="form-control form-control-lg my-1" name="code" placeholder="Codigo" value="123456" required autofocus>
-                            <input type="password" id="inputPassword" class="form-control form-control-lg my-1" name="password" placeholder="Contraseña" value="^s+%YfmMaZ6MCvj" required>
+                            <input type="number" min="0" id="inputId" class="form-control form-control-lg my-1" name="code" placeholder="Codigo" required autofocus>
+                            <input type="password" id="inputPassword" class="form-control form-control-lg my-1" name="password" placeholder="Contraseña" required>
                             <select class="form-control my-1" name="type" required>
                                 <option value="" selected>Choose...</option>
                                 <option value="manager">Gerente</option>

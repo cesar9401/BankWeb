@@ -174,7 +174,7 @@ public class ControllerPdf extends HttpServlet {
         List<Cashier> cashiers = new ArrayList<>();
         cashiers.add(cashier);
 
-        Map<String, Object> parametros = getManagerData(request, "Cajero con más transacciones entre entre " + date1 + " y " + date2);
+        Map<String, Object> parametros = getManagerData(request, "Cajero con más transacciones entre " + date1 + " y " + date2);
         generatePdf(request, response, cashiers, parametros, "gerente7.jrxml");
     }
 

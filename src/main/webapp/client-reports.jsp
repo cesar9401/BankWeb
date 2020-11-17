@@ -136,6 +136,12 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col col-md-8 offset-md-2">
+                            <a href="ControllerPdfClient?action=client2&date1=${date1}&date2=${date2}" class="btn btn-outline-dark btn-block" target="_blank">Generar PDF</a>
+                        </div>
+                    </div> 
+
                 </div>
 
 
@@ -154,9 +160,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>${top1.get(0).accountId}</td>
-                                            <td>${top1.get(0).dateAccount}</td>
-                                            <td>Q. ${top1.get(0).credit}</td>
+                                            <td>${accountId}</td>
+                                            <td>${dateAccount}</td>
+                                            <td>Q. ${credit}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -278,22 +284,22 @@
         <c:choose>
             <c:when test="${client1 != null}">
                 <script>
-                    $("#title-report-client").text("Transacciones Top15 del año por cuenta");
+                    $('#title-report-client').text("Transacciones Top15 del año por cuenta");
                     $('#for-client-1').prop("hidden", false);
-                    $("#client-account").prop("required", true);
-                    $("#client-year").prop("required", true);
+                    $('#client-account').prop("required", true);
+                    $('#client-year').prop("required", true);
                     $('#btn-report-client').prop("value", "getClient1");
                     <c:if test="${top15 != null}">
-                    $("#client1").prop("hidden", false);
-                    $("#client-account").val("${account}");
-                    $("#client-year").val("${year}");
+                    $('#client1').prop("hidden", false);
+                    $('#client-account').val("${account}");
+                    $('#client-year').val("${year}");
                     </c:if>
                 </script>
             </c:when>
 
             <c:when test="${client2 != null}">
                 <script>
-                    $("#title-report-client").text("Transacciones dentro de un intervalo de tiempo");
+                    $('#title-report-client').text("Transacciones dentro de un intervalo de tiempo");
                     $('#for-client-2').prop("hidden", false);
                     $('#date1').prop("required", true);
                     $('#date2').prop("required", true);
@@ -308,13 +314,13 @@
 
             <c:when test="${client3 != null}">
                 <script>
-                    $("#title-report-client").text("Transacciones cuenta Top1");
+                    $('#title-report-client').text("Transacciones cuenta Top1");
                     $('#for-client-2').prop("hidden", false);
                     $('#date1').prop("required", true);
                     $('#date2').prop("required", true);
                     $('#btn-report-client').prop("value", "getClient3");
                     <c:if test="${top1 != null}">
-                    $("#client3").prop("hidden", false);
+                    $('#client3').prop("hidden", false);
                     $('#date1').val("${date1}");
                     $('#date2').val("${date2}");
                     </c:if>
@@ -323,7 +329,7 @@
 
             <c:when test="${client4 != null}">
                 <script>
-                    $("#title-report-client").text("Solicitudes de Asociaciones Recibidas");
+                    $('#title-report-client').text("Solicitudes de Asociaciones Recibidas");
                     $('#form-report-client').prop("hidden", true);
                     $("#client4").prop("hidden", false);
                 </script>
@@ -331,9 +337,9 @@
 
             <c:when test="${client5 != null}">
                 <script>
-                    $("#title-report-client").text("Solicitudes de Asociaciones Enviadas");
+                    $('#title-report-client').text("Solicitudes de Asociaciones Enviadas");
                     $('#form-report-client').prop("hidden", true);
-                    $("#client5").prop("hidden", false);
+                    $('#client5').prop("hidden", false);
                 </script>
             </c:when>
         </c:choose>

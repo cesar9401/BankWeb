@@ -1,6 +1,7 @@
 package com.bank.model;
 
 import com.bank.control.ReadXml;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +13,7 @@ import org.jdom2.Element;
  *
  * @author cesar31
  */
-public class Transaction {
+public class Transaction implements Serializable {
 
     private int transactionId;
     private int accountId;
@@ -26,14 +27,14 @@ public class Transaction {
     private String cashierName;
     private String clientName;
     private int clientId;
-    
+
     //Para reporte 3
     private String dpi;
     private Double total;
-    
+
     private Double credit;
     private java.sql.Date dateAccount;
-    
+
     private String date;
 
     public Transaction(Element e) {
@@ -55,7 +56,7 @@ public class Transaction {
         this.amount = Double.parseDouble(request.getParameter("amount"));
         this.cashierId = Integer.parseInt(request.getParameter("cashierId"));
     }
-    
+
     public Transaction(ResultSet rs) throws SQLException {
         this.transactionId = rs.getInt("transaction_id");
         this.accountId = rs.getInt("account_id");
@@ -89,7 +90,7 @@ public class Transaction {
         this.dpi = dpi;
         this.total = total;
     }
-    
+
     public int getTransactionId() {
         return transactionId;
     }
@@ -217,7 +218,7 @@ public class Transaction {
     public void setDate(String date) {
         this.date = date;
     }
-    
+
     @Override
     public String toString() {
         return "Transaction{" + "transactionId=" + transactionId + ", accountId=" + accountId + ", createdOn=" + createdOn + ", createdAt=" + createdAt + ", type=" + type + ", amount=" + amount + ", cashierId=" + cashierId + ", balance=" + balance + '}';

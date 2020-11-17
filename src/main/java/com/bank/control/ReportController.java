@@ -374,6 +374,12 @@ public class ReportController extends HttpServlet {
         java.sql.Date date1 = ReadXml.getDate(request.getParameter("date1"));
         java.sql.Date date2 = ReadXml.getDate(request.getParameter("date2"));
         List<Transaction> top1 = reportDao.getTrasactionsAccountWithMoreMoney(code, date1, date2);
+        if (!top1.isEmpty()) {
+            request.setAttribute("accountId", top1.get(0).getAccountId());
+            request.setAttribute("dateAccount", top1.get(0).getDateAccount());
+            request.setAttribute("credit", top1.get(0).getCredit());
+
+        }
 
         request.setAttribute("top1", top1);
         request.setAttribute("date1", date1);
